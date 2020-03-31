@@ -4,16 +4,12 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="2019年终总结, 微笑不露声色">
+    <meta name="keywords" content="每日一道面试题（第6期）---如何实现多线程中的同步, 微笑不露声色">
     <meta name="baidu-site-verification" content>
     <meta name="google-site-verification" content>
     <meta name="360-site-verification" content>
     <meta name="description" content="
-    
-
-
-
-搞了好几天，也总算是搭建了一个自己的博客。在此感谢大佬的超详细Hexo+Github博客搭建小白教程，虽然现在我对于hexo还是有点一知半解，不过随着后面的坚持，对于hexo应该也会越来越熟练，自己的博客也会具有自己的特色">
+零零碎碎的东西总是记不长久，仅仅学习别人的文章也只是他人咀嚼后留下的残渣。无意中发现了这个每日一道面试题，想了想如果只是简单地去思考，那么不仅会收效甚微，甚至难一点的题目自己可能都懒得去想，坚持不下来。所以不如把每一次的思考、理解以及别人">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -21,7 +17,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>2019年终总结 | 微笑不露声色</title>
+    <title>每日一道面试题（第6期）---如何实现多线程中的同步 | 微笑不露声色</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -47,10 +43,7 @@
         })();
     </script>
 <link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
-<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
-<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
-</head>
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 <body>
 
@@ -298,13 +291,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/26.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        2019年终总结
+                        每日一道面试题（第6期）---如何实现多线程中的同步
                     </div>
                 </div>
             </div>
@@ -415,8 +408,12 @@
                     
                     <div class="article-tag">
                         
-                        <a href="../../../../tags/随笔/" target="_blank">
-                            <span class="chip bg-color">随笔</span>
+                        <a href="../../../../tags/Android/" target="_blank">
+                            <span class="chip bg-color">Android</span>
+                        </a>
+                        
+                        <a href="../../../../tags/面试/" target="_blank">
+                            <span class="chip bg-color">面试</span>
                         </a>
                         
                     </div>
@@ -427,8 +424,8 @@
                     <div class="post-cate">
                         <i class="fa fa-bookmark fa-fw icon-category"></i>
                         
-                        <a href="../../../../categories/随笔/" class="post-category" target="_blank">
-                            随笔
+                        <a href="../../../../categories/Android/" class="post-category" target="_blank">
+                            Android
                         </a>
                         
                     </div>
@@ -439,7 +436,7 @@
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-12-31
+                    2020-03-31
                 </div>
 
                 <div class="post-author info-break-policy">
@@ -453,14 +450,14 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.2k
+                    3.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    4 分
+                    12 分
                 </div>
                 
                 
@@ -476,36 +473,238 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                
-    <div id="aplayer-FqiYcMeZ" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="0005V9zG4OuTes" data-server="tencent" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
-
-
-
-<p>搞了好几天，也总算是搭建了一个自己的博客。在此感谢<a href="https://godweiyang.com/2018/04/13/hexo-blog/" target="_blank" rel="noopener">大佬的超详细Hexo+Github博客搭建小白教程</a>，虽然现在我对于hexo还是有点一知半解，不过随着后面的坚持，对于hexo应该也会越来越熟练，自己的博客也会具有自己的特色。</p>
-<p>踩着2019年的尾巴，也来做一下这一年的总结。三年多的大学时光确实稍纵即逝，不知不觉大四也已经过了大半，想想大一刚入学时对大学生活的憧憬，现在回过头来，确实差强人意。平平淡淡，一个普普通通的大学生拥有的大学生活，仅此而已。</p>
-<h1 id="2019"><a href="#2019" class="headerlink" title="2019"></a>2019</h1><p>回首2019年，其实只做了了一件事，<strong>实习</strong>。</p>
-<p>2019年开学伊始，是一个不断积累的过程。身处非计算机专业，要想在互联网技术岗位谋一片天地，很多东西都需要自己去积累。不过还好，好歹专业还有java、c、android这样的基础课程，也算是擦了点边。不过也仅此而已，更深层的东西仍需自己去挖掘。回想大一的时候，已经想过未来自己要进互联网行业，可惜仅仅是想法而已，自学个c语言慢吞吞的，看到数据结构、算法导论又头疼的要命，结果2019年算是到还债的时候了。每次下课、每个晚上、每个周末都差不多泡在了题海、各种各样的校招面试知识总结中，不过越看越觉得像是在闭门造车，不在真正的项目中进行实战，这些总结过的知识点在心里始终像是无根的浮萍，随时都会飘走。</p>
-<img src="/2019/12/31/2019-nian-zhong-zong-jie/0.jpg" width="500" height="500">
-
-<p>四、五、六月份，也开始陆续投递简历找暑假实习。简历上的东西仅有之前做过的学院举行的it农场比赛的作品—一个笔记类的app，显得很苍白，投了好几家都不了了之。不过幸运的是，最后一血献给了腾讯音乐，然后就没然后了，初试就被虐的找不到北，很基础的知识点却始终答不上来，基础差的要命。直到7月份初，去面了映客直播，第二天就给了答复说可以去实习。毕业实习也算是有了着落。</p>
-<img src="/2019/12/31/2019-nian-zhong-zong-jie/1.jpg" width="500" height="500" title="哈哈映宝，我也有一个">
-
-<p>接下来的半年时间，就是上班时光。初入职场，熟悉工作环境、工作流程，了解职场规则，接触上市项目的代码，一切都充满着新鲜、未知以及巨大的挑战。职场不同于校园，在这样的环境中，也确实得到了很大的锻炼，技术能力、办事能力、沟通能力得到了不同程度的提高。也很幸运的结识一帮同事，可以一起谈天说地，或者是在需求上、bug上争论个不休。</p>
-<img src="/2019/12/31/2019-nian-zhong-zong-jie/2.jpg" width="500" height="500" title="圣诞快乐呀">
-
-<p>直到前几天，实习结束回校，实习阶段、2019年也都算是换上了一个句号。不管这个句号是否圆满，2019年也已经过去，当我回首，也确没有因为虚度光阴而悔恨。</p>
-<h1 id="2020"><a href="#2020" class="headerlink" title="2020"></a>2020</h1><p>2020年即将到来，迎面而来的就是毕业设计。因为实习做的是android开发，所以也找了对应的导师，给我安排了一个<strong>基于安卓的人机交互游戏系统</strong>，曾经开题报告就让我为难的要死，不过现在确定了具体的方向，也算是有个大概的框架。通过<a href="https://zh.wikipedia.org/wiki/Leap_Motion" target="_blank" rel="noopener">leap motion</a>手势去控制移动端游戏，虽然之前没接触过leap motion，更没开发过游戏，并且网上通过leap motion去控制手机也都是外国人玩的东西，不过我还是决定做这个了，毕竟在我接触leap motion之后，我也觉得这玩意是真的好玩。。。</p>
-<img src="/2019/12/31/2019-nian-zhong-zong-jie/3.jpg" width="500" height="500" title="leap motion">
-
-<p>然后还有一个更重要的事，就是春招。虽然在实习时已经表态要留下来，不过始终感觉平（xin）台（zi）还是有点低（shao），接下来还是要好好准备准备，再战春招，给自己一个满意的答复，不留遗憾。</p>
-<p>剩下的，就是毕业后的事情了。到时候得租一个好点的房子，毕竟小可爱要来广州啦。从高二到现在，两年同班到三年异地，着实不易。性格原因，和我在一起确实受很多委屈，不过再有半年时光，黎明终会到来呀。此刻，我在安安静静码字，想必你已经到朋友家开始跨年了吧，就让我们一起，在不同的空间迎接2020年的到来吧！</p>
-<img src="/2019/12/31/2019-nian-zhong-zong-jie/4.jpg" width="500" height="500" title="哈哈，刚好在朋友圈看到她和朋友们一起跨年，悄咪咪的把她抱上来">
-
-<p>新的一年，就祝愿自己心想事成吧！</p>
-<blockquote>
-<p>喔啊 我爱的是我们的梦</p>
-<p>哈 你爱的是一起做梦</p>
+                <blockquote>
+<p>零零碎碎的东西总是记不长久，仅仅学习别人的文章也只是他人咀嚼后留下的残渣。无意中发现了这个<a href="https://github.com/Moosphan/Android-Daily-Interview" target="_blank" rel="noopener">每日一道面试题</a>，想了想如果只是简单地去思考，那么不仅会收效甚微，甚至难一点的题目自己可能都懒得去想，坚持不下来。所以不如把每一次的思考、理解以及别人的见解记录下来。不仅加深自己的理解，更要激励自己坚持下去。</p>
 </blockquote>
+<p>在介绍多线程中的同步之前，我们先来了解下并发编程。</p>
+<h1 id="并发编程"><a href="#并发编程" class="headerlink" title="并发编程"></a>并发编程</h1><h2 id="并发编程存在的意义"><a href="#并发编程存在的意义" class="headerlink" title="并发编程存在的意义"></a>并发编程存在的意义</h2><ul>
+<li><strong>资源利用率</strong>：程序的进行，无非就是cpu对于一条条指令执行的操作。cpu对于指令进行处理的速度是非常快的，如果是串行的话，比如IO操作的速度是远远小于cpu操作的速度，这样cpu就会存在大量的空闲时间，浪费cpu资源。</li>
+<li><strong>时间</strong>：有时多个任务之间并没有什么关联，在资源充足的情况下，他们完全可以并发的进行。串行的结果只能是延长完成总任务的时间，降低效率。</li>
+<li><strong>公平性</strong>：同时申请需要进行的任务，随意的串行进行执行会打破任务之间的公平性。并发操作使任务可以同时进行，得到同样的资源，保证公平性。</li>
+</ul>
+<h2 id="并发编程的缺陷"><a href="#并发编程的缺陷" class="headerlink" title="并发编程的缺陷"></a>并发编程的缺陷</h2><ul>
+<li><strong>安全性</strong>：并发编程的安全性缺陷是众所周知的。不同的工作线程对同一资源同时进行处理会产生脏数据。典型的例子就是银行转账问题，在同一时间A向B的账户、B向A的账户转账，两个工作线程同时对余额进行操作，必定会导致操作过后对不上账的情况。</li>
+<li><strong>开销</strong>：在单个cpu的情况下，并发操作是通过cpu频繁的切换线程达到并发的目的，线程的切换涉及到寄存器的数据保存、更新等操作，需要一定的开销。在高并发的情况下，需要考虑到并发操作节省的资源与时间是否可以弥补线程切换间的开销。</li>
+<li><strong>复杂性</strong>：单个线程用到的资源可以从线程对应的栈、寄存器以及进程中的内存中获取，在执行时也不会与其他线程产生交集。多线程编程，势必会涉及到线程间的通信、数据同步等问题，一整套的并发机制设计起来很复杂。</li>
+</ul>
+<h2 id="并发编程的三大要素"><a href="#并发编程的三大要素" class="headerlink" title="并发编程的三大要素"></a>并发编程的三大要素</h2><ul>
+<li><p><strong>原子性</strong>：一个操作或者多个操作，要么全部执行，要么都不执行，执行过程中不可被任何因素打断。在java中对基本数据类型的赋值与读取是原子性操作。</p>
+</li>
+<li><p><strong>可见性</strong>：多个线程访问同一个变量时，一个线程改变了这个变量，其他线程都要对此值进行同步更新。</p>
+</li>
+<li><p><strong>有序性</strong>：即程序的执行顺序按照代码的先后顺序执行。这是因为处理器在执行程序时，为了优化程序执行效率，会对代码进行不同程度上的指令重排序，当然这种重排序不会改变程序最后运行的结果，因为不会对存在数据依赖的代码进行重排序。也就是下一行代码需要用到上一行代码的数据。在单线程中指令重排序没有任何问题，但是在多线程中就会出现问题。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token comment" spellcheck="true">//线程1:</span>
+context <span class="token operator">=</span> <span class="token function">loadContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">//语句1</span>
+inited <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>             <span class="token comment" spellcheck="true">//语句2</span>
+
+<span class="token comment" spellcheck="true">//线程2:</span>
+<span class="token keyword">while</span><span class="token punctuation">(</span><span class="token operator">!</span>inited <span class="token punctuation">)</span><span class="token punctuation">{</span>
+ <span class="token function">sleep</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span class="token function">doSomethingwithconfig</span><span class="token punctuation">(</span>context<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>线程1中语句1和语句2没有数据依懒性，inited仅是一个标记变量，所以这两个语句可能发生指令重排序。当语句2在语句1之前执行时，这是恰好线程2启动，标记变量init为true则线程2认为初始化已经完成，而此时语句1并没有执行，就会造成问题。</p>
+</li>
+</ul>
+<p><strong>所以说，并发编程中保证原子性、可见性、有序性，是同步的基本要素</strong></p>
+<h1 id="同步操作"><a href="#同步操作" class="headerlink" title="同步操作"></a>同步操作</h1><h2 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h2><p>volatile是java的一个关键字，一旦一个共享变量（类的成员变量、静态变量）被volatile关键字修饰，就具备有两层含义</p>
+<ul>
+<li>当一个线程对此变量的值进行了更新操作，那么对其他线程是可见的。这里的更新操作，指写入工作内存。</li>
+<li>禁止指令重排序。具体为volatile变量之前的代码不会被指令重排序到此变量之后，在程序执行到volatile变量时，之前的代码一定已经全部执行，之后的代码一定还没有执行。</li>
+</ul>
+<p>这就保证了可见性与有序性，但是volatile并不保证可见性。看下面一段代码</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Main</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">volatile</span> <span class="token keyword">static</span> <span class="token keyword">int</span> test <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">volatile</span> <span class="token keyword">static</span> <span class="token keyword">int</span> count <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>i<span class="token operator">&lt;</span><span class="token number">10</span><span class="token punctuation">;</span>i<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            Main mm <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Runnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token annotation punctuation">@Override</span>
+                <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> j<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>j<span class="token operator">&lt;</span><span class="token number">10000</span><span class="token punctuation">;</span>j<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+                        mm<span class="token punctuation">.</span><span class="token function">increase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token punctuation">}</span>
+                    count<span class="token operator">--</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>count <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token comment" spellcheck="true">//所有线程执行完毕</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"最后的数据为"</span> <span class="token operator">+</span> test<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">increase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>test<span class="token operator">++</span><span class="token punctuation">;</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>运行后你会发现，每一次的结果都小于100000。这是因为<code>test++</code>这个操作，它不是原子性的，与test本身这个变量无关。</p>
+<p><code>test++</code> 经过三个原子操作，读取test变量值、test变量进行加一操作、将操作后的变量值写入工作内存。当线程1执行到前两步时，线程2开始读取test变量值，当线程1三个步骤执行完毕时，虽然此时test的值会立马更新到线程2，但是线程2已经在此之前进行了读取变量值的操作，所以实际上两个线程只让test加了一次。</p>
+<p>所以说，volatile只进行一些简单的同步操作，比如上面提到的标记变量</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">volatile</span> <span class="token keyword">boolean</span> inited <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//线程1:</span>
+context <span class="token operator">=</span> <span class="token function">loadContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">//语句1</span>
+inited <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>             <span class="token comment" spellcheck="true">//语句2</span>
+
+ <span class="token comment" spellcheck="true">//线程2:</span>
+<span class="token keyword">while</span><span class="token punctuation">(</span><span class="token operator">!</span>inited <span class="token punctuation">)</span><span class="token punctuation">{</span>
+   <span class="token function">sleep</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span class="token function">doSomethingwithconfig</span><span class="token punctuation">(</span>context<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>并发编程中的单例模式</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Singleton</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">volatile</span> <span class="token keyword">static</span> Singleton instance <span class="token operator">=</span> null<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token function">Singleton</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> Singleton <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>instance <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>Singleton<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>instance <span class="token operator">==</span> null<span class="token punctuation">)</span>
+                    instance <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Singleton</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> instance<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这个虽然有synchronized关键字来保证单线程访问，但是这里面其实是<code>instance=new Singleton()</code>指令重排序的问题，这一步有三个原子性操作</p>
+<ul>
+<li>为instance分配内存</li>
+<li>调用构造参数初始化成员变量</li>
+<li>将instance对象指向分配好的内存空间<br>其中第二步与第三步是会发生指令重排序的，这两部之间并没有数据依赖。如果第三步在第二步之前执行（此时instance已经非空了），此时另一个线程发现instance非null，就直接拿去使用了，这时第二步初始化变量操作还没有执行，就会发生错误。</li>
+</ul>
+<h2 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h2><p>synchronized同样是java中的一个关键字。它通过锁机制实现同步,要执行代码，则必须要获得锁，只有获得锁对象的线程才能执行锁住的代码，其他线程没有获得锁只能阻塞。锁有<strong>对象锁</strong>和<strong>类锁</strong>。同步有两种表现形式：<strong>同步代码块</strong>和<strong>同步方法</strong></p>
+<ul>
+<li>对象锁：仅针对该类的一个实例在不同线程中的应用，如果是同一个类的多个对象在不同的线程中，则不会有影响。</li>
+<li>类锁：针对该类的所有实例。<h3 id="同步代码块"><a href="#同步代码块" class="headerlink" title="同步代码块"></a>同步代码块</h3></li>
+<li><em>对象锁*</em><pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Test</span><span class="token punctuation">{</span>
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">testMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+       <span class="token keyword">synchronized</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+           <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+       <span class="token punctuation">}</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><em>类锁*</em><pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Test</span><span class="token punctuation">{</span>
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">testMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+       <span class="token keyword">synchronized</span><span class="token punctuation">(</span>Test<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+           <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+       <span class="token punctuation">}</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><em>对象锁。这里的o代表任意一个object对象或者数组，谁拥有这个对象谁就可以执行该程序块代码*</em><pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Test</span><span class="token punctuation">{</span>
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">testMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+       <span class="token keyword">synchronized</span><span class="token punctuation">(</span>o<span class="token punctuation">)</span><span class="token punctuation">{</span>
+           <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+       <span class="token punctuation">}</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="同步方法"><a href="#同步方法" class="headerlink" title="同步方法"></a>同步方法</h3></li>
+<li><em>类锁*</em><pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Test</span><span class="token punctuation">{</span>
+   <span class="token keyword">public</span> <span class="token keyword">synchronized</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">testMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+       <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><em>对象锁*</em><pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Test</span><span class="token punctuation">{</span>
+   <span class="token keyword">public</span> <span class="token keyword">synchronized</span> <span class="token keyword">void</span> <span class="token function">testMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+       <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ul>
+<h2 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h2><p>ReentrantLock是一个类，它的同步方法与synchronized大致相同。</p>
+<p>基本用法</p>
+<pre class="line-numbers language-java"><code class="language-java">ReentrantLock lock <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ReentrantLock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//参数默认false，不公平锁</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+lock<span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//如果被其它资源锁定，会在此等待锁释放，达到暂停的效果</span>
+<span class="token keyword">try</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//操作</span>
+<span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+    lock<span class="token punctuation">.</span><span class="token function">unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">//释放锁</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>ReentrantLock通过lock方法与unlock方法显式的获取锁与释放锁，与synchronized隐式的获取锁不同。当线程执行到lock.lock()方法时，会尝试获取锁，获取到锁则执行下去，获取不到则会阻塞。unlock()方法则会释放当前线程所持有的锁，如果没有锁可以释放可能会发生异常。</p>
+<p>显式的获取锁虽然比隐式的自动获取锁麻烦了不少，但多了许多可控制的情况。我们可以中断获取锁、延迟获取锁等一些操作。</p>
+<p><strong>公平锁</strong></p>
+<p>当许多线程在队列中等待锁时，cpu会随机挑选一个线程获得锁。这样就会出现饥饿现象，即优先级低的线程不断被优先级高的线程抢占锁资源，以至于很长时间获得不到锁，这就是不公平锁。RenntrantLock可以使用公平锁，即cpu调度按照线程先后等待的顺序获得锁，避免饥饿现象。但是执行效率会比较低，因为需要维护一个有序队列。synchronized是不公平锁。</p>
+<pre class="line-numbers language-java"><code class="language-java">ReentrantLock lock <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ReentrantLock</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>通过在创建对象时传入boolean对象表示使用什么锁，默认为false不公平锁。</p>
+<h2 id="synchronized与reentrantLock比较"><a href="#synchronized与reentrantLock比较" class="headerlink" title="synchronized与reentrantLock比较"></a>synchronized与reentrantLock比较</h2><ul>
+<li>ReentrantLock实现Lock接口，是一个类，synchronized是java关键字，是内置的语言实现</li>
+<li>synchron在发生异常时，会自动释放锁，几乎不会造成死锁。ReentrantLock需要手动的释放锁（unLock），所以在使用时应在finally代码块中释放锁。</li>
+<li>ReentrantLock可以中断锁的获取，即获取不到锁时继续执行下去，而synchronized却不可以，会一直阻塞。</li>
+<li>通过lock可以知道有没有成功获取锁，synchronized不可以</li>
+</ul>
+<p>可以看出，ReentrantLock实现了许多更高级的功能，不过却多了点复杂性。在性能上来说，竞争不激烈时，两者的性能是差不多的，不过当竞争激烈时，即有大量线程等待获取锁，ReentrantLock的性能要更好一些，具体的使用看情况进行。</p>
+<p>jdk1.6以前synchronized的性能是很差的，jdk1.6以后对synchronized的性能优化了不少，和ReentrantLock性能差不了多少。官方也表示更支持synchronized，以后还有优化的余地，所以在都能符合需求的情况下，推荐使用synchronized。</p>
+<h2 id="CAS原子操作"><a href="#CAS原子操作" class="headerlink" title="CAS原子操作"></a>CAS原子操作</h2><p><strong>乐观锁与悲观锁：</strong> </p>
+<p>cpu调度线程，通过将时间片分配给不同的线程进行调度。时间片的切换也就是线程的切换，需要清除寄存器、缓存数据，切换后加载线程需要的数据，需要耗费一定的时间。线程阻塞后，通过notify、notifyAll唤醒。假如线程1在尝试获取锁，获取失败，挂起。这时锁被释放，线程1被唤醒，尝试获取锁，结果又被其他线程抢占锁，线程1继续挂起，获取锁的线程只占用锁很短的时间，释放锁，线程1又被唤醒。。。就这样，线程1反复的挂起、唤醒，线程1认为其他线程获取锁就一定会对锁内的资源进行更新等操作，所以不断等待，这就是悲观锁。synchronized这种独占锁就是悲观锁。</p>
+<p>乐观锁并不加锁，首先会认为在自己修改资源之前其他线程不会对资源进行更新等操作，它会尝试用锁内资源进行自己的操作，如果修改后的数据发生冲突，就会放弃之前的操作。就这样一直循环，知道操作成功。</p>
+<p>CAS就是一种乐观锁的概念，内有三个操作数—内存原值（C）、预期旧值（A）、新值（B），当且只当内存原值与预期旧值的结果一样时，才更新新值。不然就是不断地循环尝试。Java中java.util.concurrent.atomic包相关类就是 CAS的实现.</p>
+<table>
+<thead>
+<tr>
+<th>类名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AtomicBoolean</td>
+<td>可以用原子方式更新的 boolean 值。</td>
+</tr>
+<tr>
+<td>AtomicInteger</td>
+<td>可以用原子方式更新的 int 值。</td>
+</tr>
+<tr>
+<td>AtomicIntegerArray</td>
+<td>可以用原子方式更新其元素的 int 数组。</td>
+</tr>
+<tr>
+<td>AtomicIntegerFieldUpdater</td>
+<td>基于反射的实用工具，可以对指定类的指定 volatile int 字段进行原子更新。</td>
+</tr>
+<tr>
+<td>AtomicLong</td>
+<td>可以用原子方式更新的 long 值。</td>
+</tr>
+<tr>
+<td>AtomicLongArray</td>
+<td>可以用原子方式更新其元素的 long 数组。</td>
+</tr>
+<tr>
+<td>AtomicLongFieldUpdater</td>
+<td>基于反射的实用工具，可以对指定类的指定 volatile long 字段进行原子更新。</td>
+</tr>
+<tr>
+<td>AtomicMarkableReference</td>
+<td>AtomicMarkableReference 维护带有标记位的对象引用，可以原子方式对其进行更新。</td>
+</tr>
+<tr>
+<td>AtomicReference</td>
+<td>可以用原子方式更新的对象引用。</td>
+</tr>
+<tr>
+<td>AtomicReferenceArray</td>
+<td>可以用原子方式更新其元素的对象引用数组。</td>
+</tr>
+<tr>
+<td>AtomicReferenceFieldUpdater</td>
+<td>基于反射的实用工具，可以对指定类的指定 volatile 字段进行原子更新。</td>
+</tr>
+<tr>
+<td>AtomicStampedReference    AtomicStampedReference</td>
+<td>维护带有整数“标志”的对象引用，可以用原子方式对其进行更新。</td>
+</tr>
+</tbody></table>
+<p>这种不需要锁的非阻塞算法，在性能上是要优于阻塞算法。一般使用如下,实现自增<code>i++</code>的同步操作</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Test</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> AtomicInteger i<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">add</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        i<span class="token punctuation">.</span><span class="token function">getAndIncrement</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>CAS的问题</strong></p>
+<ul>
+<li>ABA问题。一个值从A变为B又变为A，它的值实际上是变化了，可是CAS却识别不出来。这种问题解决思路就是在变量前面加上版本号，即1A-2B-3A。从Java1.5开始JDK的atomic包里提供了一个类AtomicStampedReference来解决ABA问题。这个类的compareAndSet方法作用是首先检查当前引用是否等于预期引用，并且当前标志是否等于预期标志，如果全部相等，则以原子方式将该引用和该标志的值设置为给定的更新值。</li>
+<li>CAS操作如果长时间不成功，会给cpu带来巨大的开销。</li>
+</ul>
 
             </div>
             <hr />
@@ -664,7 +863,7 @@
             <br/>
             <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text"
                   property="dct:title" rel="dct:type">
-                    《2019年终总结》
+                    《每日一道面试题（第6期）---如何实现多线程中的同步》
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="" property="cc:attributionName"
                rel="cc:attributionURL">
@@ -707,7 +906,7 @@
         repo: 'leaps339.github.io',
         owner: 'leaps339',
         admin: "leaps339",
-        id: '2019/12/31/2019-nian-zhong-zong-jie/',
+        id: '2020/03/31/mei-ri-yi-dao-mian-shi-ti-di-6-qi-ru-he-shi-xian-duo-xian-cheng-zhong-de-tong-bu/',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -994,19 +1193,20 @@
             <div class="article-badge left-badge text-color">
                 <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="../../../../2020/03/31/retrofit-yuan-ma-fen-xi/">
+                <a href="../mei-ri-yi-dao-mian-shi-ti-di-7-qi-android-bu-jian-dong-hua-yu-shu-xing-dong-hua-de-qu-bie/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="Retrofit源码分析">
+                        <img src="/medias/featureimages/26.jpg" class="responsive-img" alt="每日一道面试题（第7期）---Android补间动画与属性动画的区别">
                         
-                        <span class="card-title">Retrofit源码分析</span>
+                        <span class="card-title">每日一道面试题（第7期）---Android补间动画与属性动画的区别</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            在学习了Retrofit分析-漂亮的解耦套路（视频版）后，自己又仔细的钻研了一下Retrofit的源码，也大致清楚了Retrofit进行网络请求的步骤。好记性不如烂笔头，以文章的形式将对于Retrofit的思考记录下来，也加深理解。（如有错
+                            
+零零碎碎的东西总是记不长久，仅仅学习别人的文章也只是他人咀嚼后留下的残渣。无意中发现了这个每日一道面试题，想了想如果只是简单地去思考，那么不仅会收效甚微，甚至难一点的题目自己可能都懒得去想，坚持不下来。所以不如把每一次的思考、理解以及别人
                         
                     </div>
                     <div class="publish-info">
@@ -1032,6 +1232,10 @@
                         <span class="chip bg-color">Android</span>
                     </a>
                     
+                    <a href="../../../../tags/面试/" target="_blank">
+                        <span class="chip bg-color">面试</span>
+                    </a>
+                    
                 </div>
                 
             </div>
@@ -1040,46 +1244,50 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="fa fa-dot-circle-o"></i>
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="">
+                <a href="../mei-ri-yi-dao-mian-shi-ti-di-5-qi-na-xie-qing-kuang-xia-hui-dao-zhi-oom-wen-ti/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="2019年终总结">
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="每日一道面试题（第5期）---哪些情况下会导致OOM问题">
                         
-                        <span class="card-title">2019年终总结</span>
+                        <span class="card-title">每日一道面试题（第5期）---哪些情况下会导致OOM问题</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            踩着2019年的尾巴，也来做一下这一年的总结。三年多的大学时光确实稍纵即逝，不知不觉大四也已经过了大半，想想大一刚入学时对大学生活的憧憬，现在回过头来，确实差强人意。平平淡淡，一个普普通通的大学生拥有的大学生活，仅此而已。
+                            
+零零碎碎的东西总是记不长久，仅仅学习别人的文章也只是他人咀嚼后留下的残渣。无意中发现了这个每日一道面试题，想了想如果只是简单地去思考，那么不仅会收效甚微，甚至难一点的题目自己可能都懒得去想，坚持不下来。所以不如把每一次的思考、理解以及别人
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-12-31
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2020-03-31
                             </span>
                         <span class="publish-author">
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="../../../../categories/随笔/" class="post-category" target="_blank">
-                                    随笔
+                            <a href="../../../../categories/Android/" class="post-category" target="_blank">
+                                    Android
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="../../../../tags/随笔/" target="_blank">
-                        <span class="chip bg-color">随笔</span>
+                    <a href="../../../../tags/Android/" target="_blank">
+                        <span class="chip bg-color">Android</span>
+                    </a>
+                    
+                    <a href="../../../../tags/面试/" target="_blank">
+                        <span class="chip bg-color">面试</span>
                     </a>
                     
                 </div>

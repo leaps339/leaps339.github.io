@@ -1,0 +1,1706 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="每日一道面试题（第9期）---谈谈Handler机制和原理, 微笑不露声色">
+    <meta name="baidu-site-verification" content>
+    <meta name="google-site-verification" content>
+    <meta name="360-site-verification" content>
+    <meta name="description" content="
+零零碎碎的东西总是记不长久，仅仅学习别人的文章也只是他人咀嚼后留下的残渣。无意中发现了这个每日一道面试题 ，想了想如果只是简单地去思考，那么不仅会收效甚微，甚至难一点的题目自己可能都懒得去想，坚持不下来。所以不如把每一次的思考、理解以及别">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>每日一道面试题（第9期）---谈谈Handler机制和原理 | 微笑不露声色</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <style type="text/css">
+        
+    </style>
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+    <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?46e79e71af0709a5b9106bf20cecc493";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body>
+
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="../../../../index.html" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">微笑不露声色</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <span>首页</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/tags" class="waves-effect waves-light">
+            
+            <span>标签</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <span>分类</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/archives" class="waves-effect waves-light">
+            
+            <span>归档</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <span>关于</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/friends" class="waves-effect waves-light">
+            
+            <span>友情链接</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/contact" class="waves-effect waves-light">
+            
+            <span>留言板</span>
+        </a>
+    </li>
+    
+    <li>
+        <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+            <i id="searchIcon" class="fa fa-search" title="搜索"></i>
+        </a>
+    </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">微笑不露声色</div>
+        <div class="logo-desc">
+            
+            华南农业大学 | 工业工程 | android开发
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                首页
+            </a>
+        </li>
+        
+        <li>
+            <a href="/tags" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                标签
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                分类
+            </a>
+        </li>
+        
+        <li>
+            <a href="/archives" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                归档
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                关于
+            </a>
+        </li>
+        
+        <li>
+            <a href="/friends" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                友情链接
+            </a>
+        </li>
+        
+        <li>
+            <a href="/contact" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                留言板
+            </a>
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/leaps339" class="waves-effect waves-light" target="_blank">
+                <i class="fa fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/leaps339" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+<script src="/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错误，将返回主页！');
+                location.href = '../../../../index.html';
+            }
+        }
+    })();
+</script>
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        每日一道面试题（第9期）---谈谈Handler机制和原理
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 20px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                        <a href="../../../../tags/Android/" target="_blank">
+                            <span class="chip bg-color">Android</span>
+                        </a>
+                        
+                        <a href="../../../../tags/面试/" target="_blank">
+                            <span class="chip bg-color">面试</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fa fa-bookmark fa-fw icon-category"></i>
+                        
+                        <a href="../../../../categories/Android/" class="post-category" target="_blank">
+                            Android
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-03-31
+                </div>
+
+                <div class="post-author info-break-policy">
+                    <i class="fa fa-user-o fa-fw"></i>作者:&nbsp;&nbsp;
+                    
+                    飞跃
+                    
+                </div>
+
+                
+                
+                <div class="info-break-policy">
+                    <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    3.1k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    12 分
+                </div>
+                
+                
+
+                
+                <div id="busuanzi_container_page_pv" class="info-break-policy">
+                    <i class="fa fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                    <span id="busuanzi_value_page_pv"></span>
+                </div>
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <blockquote>
+<p>零零碎碎的东西总是记不长久，仅仅学习别人的文章也只是他人咀嚼后留下的残渣。无意中发现了这个<a href="https://github.com/Moosphan/Android-Daily-Interview" target="_blank" rel="noopener">每日一道面试题 </a>，想了想如果只是简单地去思考，那么不仅会收效甚微，甚至难一点的题目自己可能都懒得去想，坚持不下来。所以不如把每一次的思考、理解以及别人的见解记录下来。不仅加深自己的理解，更要激励自己坚持下去。</p>
+</blockquote>
+<h1 id="Handler-机制"><a href="#Handler-机制" class="headerlink" title="Handler 机制"></a>Handler 机制</h1><p>Handler 想必接触 Android 的都已经很熟悉了，我们通常用用于子线程与主线程的通信，并在主线程中处理相关消息，比如更改 UI 等。Handler 的消息机制为我们处理线程中的通信确实方便了许多。</p>
+<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><p>最简单的使用就是在主线程中创建 Handler 对象并重写 handlerMessage() 方法处理消息，在子线程中通过 handler 对象的 sendMessage 方法发送消息。</p>
+<pre class="line-numbers language-java"><code class="language-java">Handler handler <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Handler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">handleMessage</span><span class="token punctuation">(</span>Message msg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">handleMessage</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token comment" spellcheck="true">// TODO write your message processing code</span>
+                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token comment" spellcheck="true">//TODO  handling events</span>
+                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+                handler<span class="token punctuation">.</span><span class="token function">sendMessage</span><span class="token punctuation">(</span>Message<span class="token punctuation">.</span><span class="token function">obtain</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>为了简单示例，Handler 才这样写的。这种创建方法会造成内存泄漏，具体愿意以及解决方案在<a href="https://juejin.im/post/5ce286496fb9a07edd29e461" target="_blank" rel="noopener">每日一道面试题（第 1 期）—自定义 handler 如何有效保证内存泄漏问题 </a> 都已经说明，这里不再赘述。</strong></p>
+<p>而关于 Handler 的原理，我们可能会多多少少的了解到与 Looper、Message、MessageQueue 都是离不开的，那么具体是怎麽配合呢？下面我根据消息机制的过程，结合源码一步一步的解析。</p>
+<h1 id="Handler-原理"><a href="#Handler-原理" class="headerlink" title="Handler 原理"></a>Handler 原理</h1><h2 id="创建-Handler-对象"><a href="#创建-Handler-对象" class="headerlink" title="创建 Handler 对象"></a>创建 Handler 对象</h2><p>在我们使用时，首先就是创建 Handler，那我们看一下 Handler 的构造函数都干了些什么吧。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token function">Handler</span><span class="token punctuation">(</span>Callback callback<span class="token punctuation">,</span> <span class="token keyword">boolean</span> async<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>FIND_POTENTIAL_LEAKS<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">final</span> Class<span class="token operator">&lt;</span><span class="token operator">?</span> <span class="token keyword">extends</span> <span class="token class-name">Handler</span><span class="token operator">></span> klass <span class="token operator">=</span> <span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>klass<span class="token punctuation">.</span><span class="token function">isAnonymousClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">||</span> klass<span class="token punctuation">.</span><span class="token function">isMemberClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">||</span> klass<span class="token punctuation">.</span><span class="token function">isLocalClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span>
+                    <span class="token punctuation">(</span>klass<span class="token punctuation">.</span><span class="token function">getModifiers</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> Modifier<span class="token punctuation">.</span>STATIC<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                Log<span class="token punctuation">.</span><span class="token function">w</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"The following Handler class should be static or leaks might occur: "</span> <span class="token operator">+</span>
+                    klass<span class="token punctuation">.</span><span class="token function">getCanonicalName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        <span class="token comment" spellcheck="true">//获取本地 TLS 存储区的 Looper 对象引用</span>
+        mLooper <span class="token operator">=</span> Looper<span class="token punctuation">.</span><span class="token function">myLooper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>mLooper <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span>
+                <span class="token string">"Can't create handler inside thread "</span> <span class="token operator">+</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                        <span class="token operator">+</span> <span class="token string">" that has not called Looper.prepare()"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token comment" spellcheck="true">//使用 Looper 中的 MessageQueue</span>
+        mQueue <span class="token operator">=</span> mLooper<span class="token punctuation">.</span>mQueue<span class="token punctuation">;</span>
+        mCallback <span class="token operator">=</span> callback<span class="token punctuation">;</span>
+        mAsynchronous <span class="token operator">=</span> async<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token function">Handler</span><span class="token punctuation">(</span>Looper looper<span class="token punctuation">,</span> Callback callback<span class="token punctuation">,</span> <span class="token keyword">boolean</span> async<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        mLooper <span class="token operator">=</span> looper<span class="token punctuation">;</span>
+        mQueue <span class="token operator">=</span> looper<span class="token punctuation">.</span>mQueue<span class="token punctuation">;</span>
+        mCallback <span class="token operator">=</span> callback<span class="token punctuation">;</span>
+        mAsynchronous <span class="token operator">=</span> async<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>好吧，很多构造函数，不过有用的就是这两个，其他都是调用这两个而已。从两个对比可以看出，如果你没有传入 Looper 对象，那么就会通过 Looper.myLooper() 获取。传入的话，就是用自定义的，并且 MessageQueue 一直是使用 Looper 中的 MessageQueue，所以这里出现了第两个重要结论：</p>
+<ul>
+<li><strong>Handler 对象的创建一定需要一个 Looper 对象</strong></li>
+<li><strong>Looper 中一定有 MessageQueue</strong></li>
+</ul>
+<p>然后还有两个参数 callBack 和 async，callBack 是 Handler 内部的一个接口，内部只有一个 handleMessage() 方法，作用我们下面讲到再说。然后就是 async，这个就好理解了，就是决定是异步处理消息，还是同步处理消息，默认为同步 false;</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Callback</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">handleMessage</span><span class="token punctuation">(</span>Message msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h2 id="Looper-对象的创建"><a href="#Looper-对象的创建" class="headerlink" title="Looper 对象的创建"></a>Looper 对象的创建</h2><p>上一个步骤中我们知道，Handler 是直接从 Looper.myLooper() 中获得对象的，我们具体探讨一下。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token annotation punctuation">@Nullable</span> Looper <span class="token function">myLooper</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> sThreadLocal<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>很简单，是从一个集合中拿到的，这个 sThreadLocal，是 ThreadLocal 类的对象，代表着本地存储区（Thread Local Storage 简称 TLS），线程中的唯一 Looper 对象就存储在这里，每个线程都有一个本地存储区域，并且是私有的，线程之间不能相互访问。我们寻找一下是在哪个地方插入的</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">prepare</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">prepare</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">prepare</span><span class="token punctuation">(</span><span class="token keyword">boolean</span> quitAllowed<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>sThreadLocal<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"Only one Looper may be created per thread"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    sThreadLocal<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Looper</span><span class="token punctuation">(</span>quitAllowed<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>找到啦，由两个方法的权限访问修饰符可知，我们只能调用第一个，也就是说，第二个方法的参数永远是 true。再来看第二个方法，首先就是一个异常捕获，有的人可能已经很熟悉了，那就是一个线程中只能有一个 Looper。后面就是没有的话就 new 一个 Looper 对象，构造函数中都干了什么呢？</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token function">Looper</span><span class="token punctuation">(</span><span class="token keyword">boolean</span> quitAllowed<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    mQueue <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MessageQueue</span><span class="token punctuation">(</span>quitAllowed<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    mThread <span class="token operator">=</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>也很简单，初始化了 mQueue 也就是 MessageQueue，还有就是当前所在的线程 mThread。从权限访问修饰符可以看出，这是一个私有的构造方法，所以说，我们创建 Looper 方法只有 prepare() 方法啦。</p>
+<h2 id="MessageQueue-对象的创建"><a href="#MessageQueue-对象的创建" class="headerlink" title="MessageQueue 对象的创建"></a>MessageQueue 对象的创建</h2><p>上述 Looper 对象的创建中，new 了一个 MessageQueue 方法，我们看看都干了什么。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token function">MessageQueue</span><span class="token punctuation">(</span><span class="token keyword">boolean</span> quitAllowed<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    mQuitAllowed <span class="token operator">=</span> quitAllowed<span class="token punctuation">;</span>
+    mPtr <span class="token operator">=</span> <span class="token function">nativeInit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>也很简单，初始化了两个变量 mQuitAllowed 与 mPtr，第一个代表着消息队列是否可以退出，上面也说了，我们么的办法，只能是 true。第二个 mPtr，涉及到 Native 层的代码，在 native 层也做了一个初始化，具体深入了解可到此处<a href="http://gityuan.com/2015/12/27/handler-message-native/" target="_blank" rel="noopener">Android 消息机制 2-Handler(Native 层)</a></p>
+<h2 id="发送消息"><a href="#发送消息" class="headerlink" title="发送消息"></a>发送消息</h2><p>创建完 Handler，下一步就是发送 Message 了，去看看源码</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">boolean</span> <span class="token function">sendMessage</span><span class="token punctuation">(</span>Message msg<span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">boolean</span> <span class="token function">sendEmptyMessage</span><span class="token punctuation">(</span><span class="token keyword">int</span> what<span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">boolean</span> <span class="token function">sendEmptyMessageDelayed</span><span class="token punctuation">(</span><span class="token keyword">int</span> what<span class="token punctuation">,</span> <span class="token keyword">long</span> delayMillis<span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">boolean</span> <span class="token function">sendEmptyMessageAtTime</span><span class="token punctuation">(</span><span class="token keyword">int</span> what<span class="token punctuation">,</span> <span class="token keyword">long</span> uptimeMillis<span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">boolean</span> <span class="token function">sendMessageDelayed</span><span class="token punctuation">(</span>Message msg<span class="token punctuation">,</span> <span class="token keyword">long</span> delayMillis<span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">sendMessageAtTime</span><span class="token punctuation">(</span>Message msg<span class="token punctuation">,</span> <span class="token keyword">long</span> uptimeMillis<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    MessageQueue queue <span class="token operator">=</span> mQueue<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>queue <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        RuntimeException e <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span>
+                <span class="token keyword">this</span> <span class="token operator">+</span> <span class="token string">" sendMessageAtTime() called with no mQueue"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Log<span class="token punctuation">.</span><span class="token function">w</span><span class="token punctuation">(</span><span class="token string">"Looper"</span><span class="token punctuation">,</span> e<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token function">enqueueMessage</span><span class="token punctuation">(</span>queue<span class="token punctuation">,</span> msg<span class="token punctuation">,</span> uptimeMillis<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>又是好多发送消息的，不过他们最后都调用了 sendMessageAtTime 方法。第一个参数是要发送的消息，而第二个是一个绝对时间，也就是发送消息的时间。在做了一些判断之后，调用了 enqueueMessage 方法。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">boolean</span> <span class="token function">enqueueMessage</span><span class="token punctuation">(</span>MessageQueue queue<span class="token punctuation">,</span> Message msg<span class="token punctuation">,</span> <span class="token keyword">long</span> uptimeMillis<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//消息获得发送该消息的 Handler 对象引用</span>
+    msg<span class="token punctuation">.</span>target <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//是否同步属性</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>mAsynchronous<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        msg<span class="token punctuation">.</span><span class="token function">setAsynchronous</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> queue<span class="token punctuation">.</span><span class="token function">enqueueMessage</span><span class="token punctuation">(</span>msg<span class="token punctuation">,</span> uptimeMillis<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在又做了一些 Message 的属性初始化后，调用了 queue 的 enqueueMessage 方法，而这个 queue 就是在 Looper 对象中获得的 MessageQueue 对象。下面是 MessageQueue 中的 enqueueMessage 方法</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">boolean</span> <span class="token function">enqueueMessage</span><span class="token punctuation">(</span>Message msg<span class="token punctuation">,</span> <span class="token keyword">long</span> when<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 每一个 Message 必须有一个 target</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>msg<span class="token punctuation">.</span>target <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalArgumentException</span><span class="token punctuation">(</span><span class="token string">"Message must have a target."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>msg<span class="token punctuation">.</span><span class="token function">isInUse</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalStateException</span><span class="token punctuation">(</span>msg <span class="token operator">+</span> <span class="token string">" This message is already in use."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">synchronized</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>mQuitting<span class="token punctuation">)</span> <span class="token punctuation">{</span>  <span class="token comment" spellcheck="true">//正在退出时，回收 msg，加入到消息池</span>
+            msg<span class="token punctuation">.</span><span class="token function">recycle</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        msg<span class="token punctuation">.</span><span class="token function">markInUse</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        msg<span class="token punctuation">.</span>when <span class="token operator">=</span> when<span class="token punctuation">;</span>
+        Message p <span class="token operator">=</span> mMessages<span class="token punctuation">;</span><span class="token comment" spellcheck="true">//mMessages 为当前消息队列的头结点</span>
+        <span class="token keyword">boolean</span> needWake<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>p <span class="token operator">==</span> null <span class="token operator">||</span> when <span class="token operator">==</span> <span class="token number">0</span> <span class="token operator">||</span> when <span class="token operator">&lt;</span> p<span class="token punctuation">.</span>when<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">//p 为 null(代表 MessageQueue 没有消息） 或者 msg 的触发时间是队列中最早的， 则进入该该分支</span>
+            msg<span class="token punctuation">.</span>next <span class="token operator">=</span> p<span class="token punctuation">;</span>
+            mMessages <span class="token operator">=</span> msg<span class="token punctuation">;</span>
+            needWake <span class="token operator">=</span> mBlocked<span class="token punctuation">;</span> 
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">//将消息按时间顺序插入到 MessageQueue。一般地，不需要唤醒事件队列，除非</span>
+            <span class="token comment" spellcheck="true">//消息队头存在 barrier，并且同时 Message 是队列中最早的异步消息。</span>
+            needWake <span class="token operator">=</span> mBlocked <span class="token operator">&amp;&amp;</span> p<span class="token punctuation">.</span>target <span class="token operator">==</span> null <span class="token operator">&amp;&amp;</span> msg<span class="token punctuation">.</span><span class="token function">isAsynchronous</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            Message prev<span class="token punctuation">;</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token punctuation">;</span><span class="token punctuation">;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                prev <span class="token operator">=</span> p<span class="token punctuation">;</span>
+                p <span class="token operator">=</span> p<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>p <span class="token operator">==</span> null <span class="token operator">||</span> when <span class="token operator">&lt;</span> p<span class="token punctuation">.</span>when<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token keyword">break</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>needWake <span class="token operator">&amp;&amp;</span> p<span class="token punctuation">.</span><span class="token function">isAsynchronous</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    needWake <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+            msg<span class="token punctuation">.</span>next <span class="token operator">=</span> p<span class="token punctuation">;</span>
+            prev<span class="token punctuation">.</span>next <span class="token operator">=</span> msg<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>needWake<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token function">nativeWake</span><span class="token punctuation">(</span>mPtr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>总结就是，MessageQueue 按照消息的触发时间插入队列，队头是最早要触发的消息。一个新的消息加入会根据触发时长从队头开始遍历。</p>
+<h2 id="消息轮询"><a href="#消息轮询" class="headerlink" title="消息轮询"></a>消息轮询</h2><p>好了，消息已经发送给 MessageQueue 了，那么谁来管理这个 MessageQueue，将其中的消息正确的、准确的分发呢？那就是 Looper，准确的说是 Looper 中的 loop() 方法，<strong>这也是我们在子线程中创建 Handler 先要之前要 Looper.perpare()，之后要 Looper.loop() 的原因。</strong></p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">loop</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">final</span> Looper me <span class="token operator">=</span> <span class="token function">myLooper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//获取 TSL 存储区的 Looper 对象</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>me <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"No Looper; Looper.prepare() wasn't called on this thread."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">final</span> MessageQueue queue <span class="token operator">=</span> me<span class="token punctuation">.</span>mQueue<span class="token punctuation">;</span><span class="token comment" spellcheck="true">//获取相对应的消息队列</span>
+
+            <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token punctuation">;</span><span class="token punctuation">;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token comment" spellcheck="true">//消息主循环，除非线程退出，不然会一直循环，没有消息时会阻塞</span>
+            <span class="token comment" spellcheck="true">//获取下一个消息，没有消息时会阻塞，消息队列退出后会返回 null，则该循环也退出</span>
+            Message msg <span class="token operator">=</span> queue<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// might block</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>msg <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">return</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+
+            <span class="token comment" spellcheck="true">// 默认为 null，可通过 setMessageLogging() 方法来指定输出，用于 debug 功能</span>
+            <span class="token keyword">final</span> Printer logging <span class="token operator">=</span> me<span class="token punctuation">.</span>mLogging<span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>logging <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                logging<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">">>>>> Dispatching to "</span> <span class="token operator">+</span> msg<span class="token punctuation">.</span>target <span class="token operator">+</span> <span class="token string">" "</span> <span class="token operator">+</span>
+                        msg<span class="token punctuation">.</span>callback <span class="token operator">+</span> <span class="token string">": "</span> <span class="token operator">+</span> msg<span class="token punctuation">.</span>what<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+
+            <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+            <span class="token keyword">try</span> <span class="token punctuation">{</span>
+                <span class="token comment" spellcheck="true">//获取消息后根据 msg 的 target 即所属 Hnadler 分发消息</span>
+                <span class="token comment" spellcheck="true">//target 即 Handler 在上面发送消息代码解释中有说明</span>
+                msg<span class="token punctuation">.</span>target<span class="token punctuation">.</span><span class="token function">dispatchMessage</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                dispatchEnd <span class="token operator">=</span> needEndTime <span class="token operator">?</span> SystemClock<span class="token punctuation">.</span><span class="token function">uptimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>traceTag <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    Trace<span class="token punctuation">.</span><span class="token function">traceEnd</span><span class="token punctuation">(</span>traceTag<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+
+            <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>logging <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                logging<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"&lt;&lt;&lt;&lt;&lt; Finished to "</span> <span class="token operator">+</span> msg<span class="token punctuation">.</span>target <span class="token operator">+</span> <span class="token string">" "</span> <span class="token operator">+</span> msg<span class="token punctuation">.</span>callback<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+
+            <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+            <span class="token comment" spellcheck="true">//分发完此消息，就回收此 Message 对象，留以复用</span>
+            msg<span class="token punctuation">.</span><span class="token function">recycleUnchecked</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>一些代码解释已经很清楚了，在在这里面主要是一个死循环轮询消息。由 MessageQueue 的 next() 方法取出消息，再由 Message 所属的 Handler 对象 dispatchMessage() 方法分发消息。首先我们看 next() 方法。</p>
+<h2 id="获取消息"><a href="#获取消息" class="headerlink" title="获取消息"></a>获取消息</h2><pre class="line-numbers language-java"><code class="language-java">Message <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// Return here if the message loop has already quit and been disposed.</span>
+        <span class="token comment" spellcheck="true">// This can happen if the application tries to restart a looper after quit</span>
+        <span class="token comment" spellcheck="true">// which is not supported.</span>
+        <span class="token keyword">final</span> <span class="token keyword">long</span> ptr <span class="token operator">=</span> mPtr<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>ptr <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token comment" spellcheck="true">//当消息循环已经退出，则直接返回</span>
+            <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">int</span> pendingIdleHandlerCount <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// -1 only during first iteration</span>
+        <span class="token keyword">int</span> nextPollTimeoutMillis <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//阻塞时长</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token punctuation">;</span><span class="token punctuation">;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>nextPollTimeoutMillis <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                Binder<span class="token punctuation">.</span><span class="token function">flushPendingCommands</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token comment" spellcheck="true">//阻塞函数，参数 nextPollTimeoutMillis 表示等待时长，或者消息队列被唤醒，都会返回</span>
+            <span class="token function">nativePollOnce</span><span class="token punctuation">(</span>ptr<span class="token punctuation">,</span> nextPollTimeoutMillis<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">synchronized</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                Message prevMsg <span class="token operator">=</span> null<span class="token punctuation">;</span>
+                Message msg <span class="token operator">=</span> mMessages<span class="token punctuation">;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>msg <span class="token operator">!=</span> null <span class="token operator">&amp;&amp;</span> msg<span class="token punctuation">.</span>target <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token comment" spellcheck="true">//当消息中的 Handler 为空时，在 MessageQueue 中寻找下一个异步消息</span>
+                    <span class="token keyword">do</span> <span class="token punctuation">{</span>
+                        prevMsg <span class="token operator">=</span> msg<span class="token punctuation">;</span>
+                        msg <span class="token operator">=</span> msg<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+                    <span class="token punctuation">}</span> <span class="token keyword">while</span> <span class="token punctuation">(</span>msg <span class="token operator">!=</span> null <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>msg<span class="token punctuation">.</span><span class="token function">isAsynchronous</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>msg <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token keyword">if</span> <span class="token punctuation">(</span>now <span class="token operator">&lt;</span> msg<span class="token punctuation">.</span>when<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                        <span class="token comment" spellcheck="true">// Next message is not ready.  Set a timeout to wake up when it is ready.</span>
+                        <span class="token comment" spellcheck="true">//下一个消息还没有到时间发送，设置阻塞时长</span>
+                        nextPollTimeoutMillis <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span> Math<span class="token punctuation">.</span><span class="token function">min</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>when <span class="token operator">-</span> now<span class="token punctuation">,</span> Integer<span class="token punctuation">.</span>MAX_VALUE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                        <span class="token comment" spellcheck="true">// 获得消息</span>
+                        mBlocked <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+                        <span class="token keyword">if</span> <span class="token punctuation">(</span>prevMsg <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                            prevMsg<span class="token punctuation">.</span>next <span class="token operator">=</span> msg<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+                        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                            mMessages <span class="token operator">=</span> msg<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+                        <span class="token punctuation">}</span>
+                        msg<span class="token punctuation">.</span>next <span class="token operator">=</span> null<span class="token punctuation">;</span>
+                        <span class="token keyword">if</span> <span class="token punctuation">(</span>DEBUG<span class="token punctuation">)</span> Log<span class="token punctuation">.</span><span class="token function">v</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"Returning message: "</span> <span class="token operator">+</span> msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                        <span class="token comment" spellcheck="true">//改变 message 状态</span>
+                        msg<span class="token punctuation">.</span><span class="token function">markInUse</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                        <span class="token keyword">return</span> msg<span class="token punctuation">;</span>
+                    <span class="token punctuation">}</span>
+                <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                    <span class="token comment" spellcheck="true">// No more messages.</span>
+                    <span class="token comment" spellcheck="true">//没有消息，设置阻塞时长</span>
+                    nextPollTimeoutMillis <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+
+                <span class="token comment" spellcheck="true">// 如果正在退出，返回空</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>mQuitting<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token function">dispose</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+
+                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+        <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>nativePollOnce 是一个阻塞函数，参数 nextPollTimeoutMillis 则代表阻塞时长，当值为-1 时，则会一直阻塞下去。<br>所以说，next 函数在 MessageQ 有消息时，会获取消息并返回，在没有消息时，则会一直阻塞。</p>
+<h2 id="分发消息"><a href="#分发消息" class="headerlink" title="分发消息"></a>分发消息</h2><p>获取完消息，就要到分发消息了，也就是消息轮询总结中的 dispatchMessage 函数，在 Handler 类中</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">dispatchMessage</span><span class="token punctuation">(</span>Message msg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>msg<span class="token punctuation">.</span>callback <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">handleCallback</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>mCallback <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>mCallback<span class="token punctuation">.</span><span class="token function">handleMessage</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">return</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        <span class="token function">handleMessage</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里的调用流程就是</p>
+<ul>
+<li>首先判断 Message 的 callback 是否存在，如果存在，就执行 handleCallback 函数，这个函数就一个简单的 message.callback.run() 方法调用。Message 中的 callback 实际上是一个 Runnable，所以就会执行自定义的 run 函数。这个的作用是在 Handler 的 post 消息上，其实 post 消息与 send 消息并没有太大的不用，只是通过 getPostMessage 方法将 Message 封装了一下，其实就是将自定义的 Runnable 传给 Message 的 callback，这样在分发消息的时候就是直接执行自定义的 Runnable 中的 run 函数。<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">boolean</span> <span class="token function">post</span><span class="token punctuation">(</span>Runnable r<span class="token punctuation">)</span><span class="token punctuation">{</span>
+  <span class="token keyword">return</span>  <span class="token function">sendMessageDelayed</span><span class="token punctuation">(</span><span class="token function">getPostMessage</span><span class="token punctuation">(</span>r<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">private</span> <span class="token keyword">static</span> Message <span class="token function">getPostMessage</span><span class="token punctuation">(</span>Runnable r<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  Message m <span class="token operator">=</span> Message<span class="token punctuation">.</span><span class="token function">obtain</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  m<span class="token punctuation">.</span>callback <span class="token operator">=</span> r<span class="token punctuation">;</span>
+  <span class="token keyword">return</span> m<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>然后就是 Handler 类中有一个 Callback 接口，接口中只有一个 handleMessage() 函数。如果成员变量 mCallBack 存在，就会首先执行此接口中的函数。实际使用中我们可以实现此接口，并重写方法。然后通过 Handler 的构造方法传入。<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Callback</span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">handleMessage</span><span class="token punctuation">(</span>Message msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>最后才是我们熟悉的重写 Handler 类中的 handleMessage 方法，这个方法如果在上面那种处理过后返回的是 true，那么就根本到不了这个函数。所以说上面两种处理方式都可以拦截消息。其中第一种是一定会拦截消息，第二种则由返回值确定。<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">handleMessage</span><span class="token punctuation">(</span>Message msg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p><strong>转了一圈，从 Handler 到 Looper 又到 MessageQ 最后又回到 Handler，整个消息机制也就差不多这样啦，当然 Message 在其中就是一个实体啦，可以协上数据一起传递消息。我也是根据这个顺序，一步一步的慢慢了解每个步骤的。</strong></p>
+<p>最后，附上一张图吧，会更清晰一点<br><img src="https://user-gold-cdn.xitu.io/2019/6/6/16b2d634bf9ec289?w=902&h=550&f=png&s=261587" alt></p>
+
+            </div>
+            <hr />
+
+            
+            <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fa fa-close"></i></a>
+            <h4 class="reward-title">写作不易，客官能否打赏一杯奶茶？</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+
+            <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone" data-wechat-qrcode-helper="<p>微信里点“发现”->“扫一扫”二维码便可查看分享。</p>"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        <p class="reprint-tip">
+            <i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;
+            <span>转载规则</span>
+        </p>
+        
+            <div class="center-align">
+                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                    <img alt=""
+                         style="border-width:0"
+                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>
+                </a>
+            </div>
+            <br/>
+            <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text"
+                  property="dct:title" rel="dct:type">
+                    《每日一道面试题（第9期）---谈谈Handler机制和原理》
+                </span> 由
+            <a xmlns:cc="http://creativecommons.org/ns#" href="" property="cc:attributionName"
+               rel="cc:attributionURL">
+                飞跃
+            </a> 采用
+            <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                知识共享署名 4.0 国际许可协议
+            </a>进行许可。
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+        </div>
+    </div>
+
+    
+    <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '30c108c8a798ce45d212',
+        clientSecret: '7af2c456adc5df68c0a1367bb76c363d50058d2c',
+        repo: 'leaps339.github.io',
+        owner: 'leaps339',
+        admin: "leaps339",
+        id: '2020/03/31/mei-ri-yi-dao-mian-shi-ti-di-9-qi-tan-tan-handler-ji-zhi-he-yuan-li/',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+    <style>
+    .valine-card {
+        margin: 1.5rem auto;
+    }
+
+    .valine-card .card-content {
+        padding: 20px 20px 5px 20px;
+    }
+
+    #vcomments input[type=text],
+    #vcomments input[type=email],
+    #vcomments input[type=url],
+    #vcomments textarea {
+        box-sizing: border-box;
+    }
+
+    #vcomments p {
+        margin: 2px 2px 10px;
+        font-size: 1.05rem;
+        line-height: 1.78rem;
+    }
+
+    #vcomments blockquote p {
+        text-indent: 0.2rem;
+    }
+
+    #vcomments a {
+        padding: 0 2px;
+        color: #42b983;
+        font-weight: 500;
+        text-decoration: underline;
+    }
+
+    #vcomments img {
+        max-width: 100%;
+        height: auto;
+        cursor: pointer;
+    }
+
+    #vcomments ol li {
+        list-style-type: decimal;
+    }
+
+    #vcomments ol,
+    ul {
+        display: block;
+        padding-left: 2em;
+        word-spacing: 0.05rem;
+    }
+
+    #vcomments ul li,
+    ol li {
+        display: list-item;
+        line-height: 1.8rem;
+        font-size: 1rem;
+    }
+
+    #vcomments ul li {
+        list-style-type: disc;
+    }
+
+    #vcomments ul ul li {
+        list-style-type: circle;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    #vcomments table, th, td {
+        border: 0;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments h1 {
+        font-size: 1.85rem;
+        font-weight: bold;
+        line-height: 2.2rem;
+    }
+
+    #vcomments h2 {
+        font-size: 1.65rem;
+        font-weight: bold;
+        line-height: 1.9rem;
+    }
+
+    #vcomments h3 {
+        font-size: 1.45rem;
+        font-weight: bold;
+        line-height: 1.7rem;
+    }
+
+    #vcomments h4 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    #vcomments h5 {
+        font-size: 1.1rem;
+        font-weight: bold;
+        line-height: 1.4rem;
+    }
+
+    #vcomments h6 {
+        font-size: 1rem;
+        line-height: 1.3rem;
+    }
+
+    #vcomments p {
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+
+    #vcomments hr {
+        margin: 12px 0;
+        border: 0;
+        border-top: 1px solid #ccc;
+    }
+
+    #vcomments blockquote {
+        margin: 15px 0;
+        border-left: 5px solid #42b983;
+        padding: 1rem 0.8rem 0.3rem 0.8rem;
+        color: #666;
+        background-color: rgba(66, 185, 131, .1);
+    }
+
+    #vcomments pre {
+        font-family: monospace, monospace;
+        padding: 1.2em;
+        margin: .5em 0;
+        background: #272822;
+        overflow: auto;
+        border-radius: 0.3em;
+        tab-size: 4;
+    }
+
+    #vcomments code {
+        font-family: monospace, monospace;
+        padding: 1px 3px;
+        font-size: 0.92rem;
+        color: #e96900;
+        background-color: #f8f8f8;
+        border-radius: 2px;
+    }
+
+    #vcomments pre code {
+        font-family: monospace, monospace;
+        padding: 0;
+        color: #e8eaf6;
+        background-color: #272822;
+    }
+
+    #vcomments pre[class*="language-"] {
+        padding: 1.2em;
+        margin: .5em 0;
+    }
+
+    #vcomments code[class*="language-"],
+    pre[class*="language-"] {
+        color: #e8eaf6;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+
+    #vcomments b,
+    strong {
+        font-weight: bold;
+    }
+
+    #vcomments dfn {
+        font-style: italic;
+    }
+
+    #vcomments small {
+        font-size: 85%;
+    }
+
+    #vcomments cite {
+        font-style: normal;
+    }
+
+    #vcomments mark {
+        background-color: #fcf8e3;
+        padding: .2em;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+</style>
+
+<div class="card valine-card" data-aos="fade-up">
+    <div id="vcomments" class="card-content"></div>
+</div>
+
+<script src="/libs/valine/av-min.js"></script>
+<script src="/libs/valine/Valine.min.js"></script>
+<!-- <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script> -->
+
+<script>
+    new Valine({
+        el: '#vcomments',
+        appId: '',
+        appKey: '',
+        notify: 'false' === 'true',
+        verify: 'false' === 'true',
+        visitor: 'false' === 'true',
+        avatar: 'wavatar',
+        pageSize: '10',
+        lang: 'zh-cn',
+        placeholder: '如果你没有GitHub账号，还可以在这里评论啦！'
+    });
+</script>
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="../mei-ri-yi-dao-mian-shi-ti-di-10-qi-tan-tan-dui-handlerthread-yu-asynctask-de-li-jie/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="每日一道面试题（第10期）---谈谈对HandlerThread与AsyncTask的理解">
+                        
+                        <span class="card-title">每日一道面试题（第10期）---谈谈对HandlerThread与AsyncTask的理解</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+零零碎碎的东西总是记不长久，仅仅学习别人的文章也只是他人咀嚼后留下的残渣。无意中发现了这个每日一道面试题 ，想了想如果只是简单地去思考，那么不仅会收效甚微，甚至难一点的题目自己可能都懒得去想，坚持不下来。所以不如把每一次的思考、理解以及别
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2020-03-31
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="../../../../categories/Android/" class="post-category" target="_blank">
+                                    Android
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="../../../../tags/Android/" target="_blank">
+                        <span class="chip bg-color">Android</span>
+                    </a>
+                    
+                    <a href="../../../../tags/面试/" target="_blank">
+                        <span class="chip bg-color">面试</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="../mei-ri-yi-dao-mian-shi-ti-di-8-qi-anr-chu-xian-de-chang-jing-yi-ji-jie-jue-fang-an/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="每日一道面试题（第8期）---ANR出现的场景以及解决方案">
+                        
+                        <span class="card-title">每日一道面试题（第8期）---ANR出现的场景以及解决方案</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+零零碎碎的东西总是记不长久，仅仅学习别人的文章也只是他人咀嚼后留下的残渣。无意中发现了这个每日一道面试题，想了想如果只是简单地去思考，那么不仅会收效甚微，甚至难一点的题目自己可能都懒得去想，坚持不下来。所以不如把每一次的思考、理解以及别人
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2020-03-31
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="../../../../categories/Android/" class="post-category" target="_blank">
+                                    Android
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="../../../../tags/Android/" target="_blank">
+                        <span class="chip bg-color">Android</span>
+                    </a>
+                    
+                    <a href="../../../../tags/面试/" target="_blank">
+                        <span class="chip bg-color">面试</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: 微笑不露声色<br />'
+            + '作者: 飞跃<br />'
+            + '链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () { bodyElement.removeChild(newdiv); }, 200);
+    });
+</script>
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fa fa-list"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h1, h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h1, h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).slideUp(500);
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).slideDown(500);
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+    
+
+</main>
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            &copy; 2019 feiyue. All Rights Reserved.
+
+            
+            &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
+            <span class="white-color">23.5k</span>
+            
+
+            <br>
+            <span id="sitetime"></span>
+
+            
+            
+            <br>
+            
+            <span id="busuanzi_container_site_pv" style='display:none'>
+                <i class="fa fa-heart-o"></i>
+                本站总访问量 <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv" style='display:none'>
+                人次,&nbsp;访客数 <span id="busuanzi_value_site_uv" class="white-color"></span> 人.
+            </span>
+            
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/leaps339" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fa fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:ffeiyue@foxmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fa fa-envelope-open"></i>
+    </a>
+
+
+
+    <a href="https://zhihu.com/people/yue-yue-68-36" class="tooltipped" target="_blank" data-tooltip="访问我的知乎" data-position="top" data-delay="50">
+        <i class="fa fa-inverse">知</i>
+    </a>
+
+
+
+    <a href="https://user.qzone.qq.com/2622170786" class="tooltipped" target="_blank" data-tooltip="访问我的QQ空间" data-position="top" data-delay="50">
+        <i class="fa fa-qq"></i>
+    </a>
+
+
+
+    <a href="https://weibo.com/6065701135" class="tooltipped" target="_blank" data-tooltip="关注我的微博" data-position="top" data-delay="50">
+        <i class="fa fa-weibo"></i>
+    </a>
+
+
+
+    <a href="../../../../atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fa fa-rss"></i>
+    </a>
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+<!-- 不蒜子计数初始值纠正 -->
+<script>
+    $(document).ready(function () {
+
+        var int = setInterval(fixCount, 50);
+        var pvcountOffset = 0;
+        var uvcountOffset = 0;
+
+        function fixCount() {
+            if (document.getElementById("busuanzi_container_site_pv").style.display != "none") {
+                $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + pvcountOffset);
+                clearInterval(int);
+            }
+            if ($("#busuanzi_container_site_pv").css("display") != "none") {
+                $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + uvcountOffset); // 加上初始数据 
+                clearInterval(int);
+            }
+        }
+    });
+</script>
+
+<script language=javascript>
+    function siteTime() {
+        window.setTimeout("siteTime()", 1000);
+        var seconds = 1000;
+        var minutes = seconds * 60;
+        var hours = minutes * 60;
+        var days = hours * 24;
+        var years = days * 365;
+        var today = new Date();
+        var todayYear = today.getFullYear();
+        var todayMonth = today.getMonth() + 1;
+        var todayDate = today.getDate();
+        var todayHour = today.getHours();
+        var todayMinute = today.getMinutes();
+        var todaySecond = today.getSeconds();
+        /* Date.UTC() -- 返回date对象距世界标准时间(UTC)1970年1月1日午夜之间的毫秒数(时间戳)
+        year - 作为date对象的年份，为4位年份值
+        month - 0-11之间的整数，做为date对象的月份
+        day - 1-31之间的整数，做为date对象的天数
+        hours - 0(午夜24点)-23之间的整数，做为date对象的小时数
+        minutes - 0-59之间的整数，做为date对象的分钟数
+        seconds - 0-59之间的整数，做为date对象的秒数
+        microseconds - 0-999之间的整数，做为date对象的毫秒数 */
+        var t1 = Date.UTC(2019, 12, 22, 00, 00, 00); //北京时间2019-12-22 00:00:00
+        var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+        var diff = t2 - t1;
+        var diffYears = Math.floor(diff / years);
+        var diffDays = Math.floor((diff / days) - diffYears * 365);
+        var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+        var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) / minutes);
+        var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours - diffMinutes * minutes) / seconds);
+        document.getElementById("sitetime").innerHTML = "本站已运行 " + diffYears + " 年 " + diffDays + " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+    }/*因为建站时间还没有一年，就将之注释掉了。需要的可以取消*/
+    siteTime();
+</script>
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fa fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <script type="text/javascript"> var OriginTitile = document.title, st; document.addEventListener("visibilitychange", function () { document.hidden ? (document.title = "Σ(っ °Д °;)っ喔哟，崩溃啦！", clearTimeout(st)) : (document.title = "φ(゜▽゜*)♪咦，又好了！", st = setTimeout(function () { document.title = OriginTitile }, 3e3)) })
+    </script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+<script async src="https://www.googletagmanager.com/gtag/js?id="></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', '');
+</script>
+
+
+
+    
+    <script src="/libs/others/clicklove.js"></script>
+    
+
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    <!-- 雪花特效 -->
+    
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/assets/wanko.model.json"},"display":{"position":"left","width":150,"height":200},"mobile":{"show":false},"react":{"opacity":0.7}});</script></body>
+
+</html>
