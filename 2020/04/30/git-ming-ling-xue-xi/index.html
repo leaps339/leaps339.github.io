@@ -4,12 +4,13 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="每日一道面试题（第1期）---自定义handler如何有效保证内存泄漏问题, 微笑不露声色">
+    <meta name="keywords" content="git命令学习, 微笑不露声色">
     <meta name="baidu-site-verification" content>
     <meta name="google-site-verification" content>
     <meta name="360-site-verification" content>
-    <meta name="description" content="
-零零碎碎的东西总是记不长久，仅仅学习别人的文章也只是他人咀嚼后留下的残渣。无意中发现了这个每日一道面试题，想了想如果只是简单地去思考，那么不仅会收效甚微，甚至难一点的题目自己可能都懒得去想，坚持不下来。所以不如把每一次的思考、理解以及别人">
+    <meta name="description" content="基本操作
+初始化或者修改全局用户名：git config –global user.name “your name”
+初始化或者修改全局提交邮箱git config –global user.email “user@example.com“">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -17,7 +18,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>每日一道面试题（第1期）---自定义handler如何有效保证内存泄漏问题 | 微笑不露声色</title>
+    <title>git命令学习 | 微笑不露声色</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -291,13 +292,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/25.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        每日一道面试题（第1期）---自定义handler如何有效保证内存泄漏问题
+                        git命令学习
                     </div>
                 </div>
             </div>
@@ -408,12 +409,8 @@
                     
                     <div class="article-tag">
                         
-                        <a href="../../../../tags/Android/" target="_blank">
-                            <span class="chip bg-color">Android</span>
-                        </a>
-                        
-                        <a href="../../../../tags/面试/" target="_blank">
-                            <span class="chip bg-color">面试</span>
+                        <a href="../../../../tags/Git/" target="_blank">
+                            <span class="chip bg-color">Git</span>
                         </a>
                         
                     </div>
@@ -424,8 +421,8 @@
                     <div class="post-cate">
                         <i class="fa fa-bookmark fa-fw icon-category"></i>
                         
-                        <a href="../../../../categories/Android/" class="post-category" target="_blank">
-                            Android
+                        <a href="../../../../categories/Git/" class="post-category" target="_blank">
+                            Git
                         </a>
                         
                     </div>
@@ -436,7 +433,7 @@
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-03-31
+                    2020-04-30
                 </div>
 
                 <div class="post-author info-break-policy">
@@ -450,14 +447,14 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    801
+                    2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    7 分
                 </div>
                 
                 
@@ -473,62 +470,83 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <blockquote>
-<p>零零碎碎的东西总是记不长久，仅仅学习别人的文章也只是他人咀嚼后留下的残渣。无意中发现了这个<a href="https://github.com/Moosphan/Android-Daily-Interview" target="_blank" rel="noopener">每日一道面试题</a>，想了想如果只是简单地去思考，那么不仅会收效甚微，甚至难一点的题目自己可能都懒得去想，坚持不下来。所以不如把每一次的思考、理解以及别人的见解记录下来。不仅加深自己的理解，更要激励自己坚持下去。</p>
-</blockquote>
-<h1 id="handler作用"><a href="#handler作用" class="headerlink" title="handler作用"></a>handler作用</h1><p>SDK文档是这么说的。</p>
-<blockquote>
-<p>There are two main uses for a Handler: (1) to schedule messages and runnables to be executed as some point in the future; and (2) to enqueue an action to be performed on a different thread than your own.</p>
-</blockquote>
-<p>我们一般就是用来更新UI线程的。具体点就是在子线程进行耗时操作，比如获取网络图片，然后需要在主线程更新图片，就需要handler+Message+Loop+MessageQueue来帮忙啦。</p>
-<p>但是如果你直接创建一个handler对象，然后重写内部handlerMessage方法，那么AS一定会提醒你会有内存泄漏的可能。</p>
-<p><img src="https://user-gold-cdn.xitu.io/2019/5/20/16ad510ed440963e?w=541&h=164&f=png&s=14342" alt="Handler"></p>
-<h1 id="为什么会造成内存泄漏"><a href="#为什么会造成内存泄漏" class="headerlink" title="为什么会造成内存泄漏"></a>为什么会造成内存泄漏</h1><blockquote>
-<p>Android内存泄漏：需要被GC回收的对象因为被其他存活的对象所持有引用，而导致GC不能回收此对象。那么这块内存就会在程序运行期间长期被占据，造成系统内存的浪费，使系统运行缓慢甚至崩溃。</p>
-</blockquote>
-<p>那么handler什么时候会造成内存泄漏呢？</p>
-<p><strong>发送延迟消息</strong></p>
-<p>众所周知，匿名内部类持有外部类的引用，那么handler对象就会持有activity对象的引用。handler发送message到MessageQueue，message持有handler的引用，而MessageQueue会持有message的引用，而MessageQueue是属于TLS（ThreadLocalStorage）线程,是与Activity不同的生命周期。</p>
-<p>所以当Activity的生命周期结束后，而MessageQueue中还存在未处理的消息，那么上面一连串的引用关系就不允许Activity的对象被回收，就造成了内存泄漏。</p>
-<h1 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h1><p>知道了内存泄漏是由引用链造成的，那么解决方法也就是破坏上面的引用链。</p>
-<p>首先是引用的类型，有强引用、软引用、弱引用、虚引用，上面的引用链都是强引用。</p>
-<p><img src="https://user-gold-cdn.xitu.io/2019/5/20/16ad535316620e44?w=644&h=546&f=png&s=201549" alt="引用"></p>
-<p>所以第一种方法，自定义静态内部类，如果想使用外部类的方法，那就通过弱引用的方法引入Activity对象。</p>
-<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">BaseActivity</span> <span class="token keyword">extends</span> <span class="token class-name">Activity</span> <span class="token punctuation">{</span>
-
-    <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">onCreate</span><span class="token punctuation">(</span><span class="token annotation punctuation">@Nullable</span> Bundle savedInstanceState<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onCreate</span><span class="token punctuation">(</span>savedInstanceState<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">myHandleMessage</span><span class="token punctuation">(</span>Message msg<span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
-
-    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">MyHandler</span> <span class="token keyword">extends</span> <span class="token class-name">Handler</span><span class="token punctuation">{</span>
-        WeakReference<span class="token operator">&lt;</span>BaseActivity<span class="token operator">></span> mActivityReference<span class="token punctuation">;</span>
-        <span class="token keyword">public</span> <span class="token function">MyHandler</span><span class="token punctuation">(</span>BaseActivity activity<span class="token punctuation">)</span><span class="token punctuation">{</span>
-            mActivityReference <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">WeakReference</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span>activity<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-
-        <span class="token annotation punctuation">@Override</span>
-        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">handleMessage</span><span class="token punctuation">(</span>Message msg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            BaseActivity activity <span class="token operator">=</span> mActivityReference<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token keyword">if</span><span class="token punctuation">(</span>activity <span class="token operator">!=</span> null<span class="token punctuation">)</span><span class="token punctuation">{</span>
-                activity<span class="token punctuation">.</span><span class="token function">myHandleMessage</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">}</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>你可以自定义在BaseActivity中，在其他Activity中创建Myahndler对象，通过重写myHandleMessage方法进行消息处理。</p>
-<p>这种方法就是处理了Activity与Handler之间的引用，这种引用可以再GC时被回收。</p>
-<p>第二种，就是处理后面的引用。既然是Activity要被回收时还有未被处理的消息，那么在Activity要被回收时清除消息就可以了。</p>
-<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">onDestroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onDestroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">if</span><span class="token punctuation">(</span>mHandler <span class="token operator">!=</span> null<span class="token punctuation">)</span><span class="token punctuation">{</span>
-            mHandler<span class="token punctuation">.</span><span class="token function">removeCallbacksAndMessages</span><span class="token punctuation">(</span>null<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+                <h1 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h1><ul>
+<li>初始化或者修改全局用户名：git config –global user.name “your name”</li>
+<li>初始化或者修改全局提交邮箱git config –global user.email “<a href="mailto:user@example.com" target="_blank" rel="noopener">user@example.com</a>“</li>
+<li>添加到文件暂存区 git add &lt;file.txt&gt; 可添加多个文件，空格隔开</li>
+<li>提交文件到工作区 git commit -m “提交文字说明”</li>
+<li>查看暂存区与工作区文件状态 git status</li>
+<li>修改提交后的文件，可通过git diff查看修改的内容</li>
+<li>git diff 查看的是仓库文件与暂存区文件的区别，git diff –cached查看的是暂存区与上一次提交后也就是分支里面文件的区别</li>
+<li>查看工作区与提交后分支里面的文件差异可以用git diff HEAD – &lt;file.txt&gt;</li>
+<li>显示从最近到最远的提交日志 git log</li>
+<li>回退版本 git reset -hard HEAD^ HEAD代表当前版本，加上^表示上一个版本，两个依次类推。也可写成HEAD~100，也可写成某一次确定的提交ID，在git log可看到，前几位ID即可</li>
+<li>git reflog 可以查看命令历史，包括每一次提交的ID，准确定位要回退的版本</li>
+<li>cat &lt;file.txt&gt; 可以查看文件内容</li>
+<li>修改文件，未add到暂存区；或者add到暂存区后又修改文件后，未add。使用git checkout – file.txt可还原到上一次add或commit的操作版本。</li>
+<li>修改文件后，并add到了暂存区，可使用git reset HEAD file.txt 取消add操作（<strong>仅仅是回退了add操作，并未回退文件修改内容</strong>），经试验，同一文件多次add操作在暂存区合并为一次，修改也合并为一次修改。也就是说，多次修改及add操作后，执行git reset HEAD file.txt和git checkout – file.txt后，文件会回到上一次commit后的内容。</li>
+<li>修改文件并add后，有commit到本地仓库，可进行版本回退撤销之前的修改。</li>
+<li>如果你用的rm删除文件，那就相当于只删除了工作区的文件，如果想要恢复，直接用git checkout – <file>就可以；如果你用的是git rm删除文件，那就相当于不仅删除了文件，而且还添加到了暂存区，需要先git reset HEAD <file>，然后再git checkout – <file>；如果你想彻底把版本库的删除掉，先git rm，再git commit 就ok了</file></file></file></li>
+<li>关于git checkout – <file>既可以还原修改的操作，又可以从版本中还原文件。试验后我的理解是：这个操作会先检验暂存区有没有此文件，有的话就代替工作区的文件，没有就将版本库中的此文件代替工作区的文件。</file></li>
+</ul>
+<h1 id="与github相关联"><a href="#与github相关联" class="headerlink" title="与github相关联"></a>与github相关联</h1><p>创建ssh keys：ssh-keygen -t rsa -C “<a href="mailto:youremail@example.com" target="_blank" rel="noopener">youremail@example.com</a>“。并在github上进行相应的设置。</p>
+<p>要关联一个远程库，使用命令git remote add origin git@server-name:path/repo-name.git；关联后，使用命令git push -u origin master第一次推送master分支的所有内容；此后，每次本地提交后，只要有必要，就可以使用命令git push origin master推送最新修改；</p>
+<p>SSH协议：<a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>:leaps339/learngit.git https协议：<a href="https://github.com/leaps339/learngit.git" target="_blank" rel="noopener">https://github.com/leaps339/learngit.git</a></p>
+<p>Git支持多种协议，包括https，但通过ssh支持的原生git协议速度最快。</p>
+<p>克隆可用git clone 对应协议仓库</p>
+<h1 id="分支管理"><a href="#分支管理" class="headerlink" title="分支管理"></a>分支管理</h1><ul>
+<li>查看分支：git branch</li>
+<li>创建分支：git branch <name></name></li>
+<li>转换分支：git checkout <name></name></li>
+<li>创建并转换分支：git checkout -b <name></name></li>
+<li>合并某分支到当前分支：git merge <name></name></li>
+<li>删除分支：git branch -d <name></name></li>
+<li>分支冲突时合并会有meger failed提示，此时需手动修改文件冲突再进行add、commit操作。完成合并后删除分支</li>
+<li>git log –graph 可以查看分支合并图</li>
+<li>一般合并是fast forward模式，只是将head指针移动了位置，所以合并较快，但不能看到合并历史。</li>
+<li>合并分支禁用fast forward：git merge –no-ff -m “提交说明”。将合并后的结果再一次进行commit操作，则可以看到合并历史。</li>
+<li>在A分支上进行工作，有紧急情况需另开分支B解决其他问题。A分支上的工作并未完成，此时切换分支会将未完成工作带到B。在完成B工作后执行commit会将在A中的add的后的文件一并提交（在A中修改完文件没add不会受影响），并且Git规定在哪个分支上提交，就是在那个分支上工作。所以在切换时需使用git stash保存状态。<a href="https://blog.csdn.net/w522301629/article/details/81331273" target="_blank" rel="noopener">链接</a></li>
+<li>使用git stash后会保存工作区与暂存区的数据并清空暂存区。可使用git stash lish查看所有保存的stash，通过git stash apply恢复，git stash drop删除保存的stash。也可使用git stash pop，恢复的同时把stash也删了。当然可通过git stash apply stash@{0}恢复指定id的stash。</li>
+<li>在另开一个分支A后没有合并分支A就要将其删除，可以使用git branch -D <name> 强行删除</name></li>
+<li></li>
+</ul>
+<h1 id="多人协作"><a href="#多人协作" class="headerlink" title="多人协作"></a>多人协作</h1><ul>
+<li>使用git remote -v查看远程库详细分支信息</li>
+<li>本地新建的分支不推送远程，其他人就是不可见的</li>
+<li>通过git push origin branch-name从本地推送分支，推送失败则说明有冲突，使用git pull将远程库中最新的提交抓取下来</li>
+<li>在本地创建和远程库分支对应的分支：git checkout -b branch-name origin/branch-name。本地分支名最好和远程分支一样</li>
+<li>可使用git branch –set-upstream branch-name origin/branch-name将本地分支与远程分支关联</li>
+<li>git pull抓取分支后手动解决冲突再commit，然后进行push操作</li>
+<li></li>
+</ul>
+<h1 id="标签管理"><a href="#标签管理" class="headerlink" title="标签管理"></a>标签管理</h1><ul>
+<li>为某次提交打上一个标签，便于查找而不是用commit ID。相当于ip地址与域名的关系</li>
+<li>git tag <tagname>为当前最近一次commit打上标签，也可以在最后指定commit ID</tagname></li>
+<li>可以创建带有说明的标签git tag -a <tagname> -m “说明文字” <commit id></commit></tagname></li>
+<li>git show tag可以查看标签说明</li>
+<li>git tag可以查看所有标签</li>
+<li>将指定本地标签推到远程仓库：git push origin <tagname></tagname></li>
+<li>将所有未推送的标签推到远程仓库：git push origin –tags</li>
+<li>删除指定标签：git tag -d <tagname></tagname></li>
+<li>删除已经推到远程仓库的标签，先本地删除，然后删除远程仓库标签：git push origin :refs/tags/<tagname></tagname></li>
+<li></li>
+</ul>
+<h1 id="自定义git"><a href="#自定义git" class="headerlink" title="自定义git"></a>自定义git</h1><ul>
+<li>在git中如果想忽略掉某个文件，不让这个文件提交到版本库中，可以使用修改根目录中 .gitignore 文件的方法（如无，则需自己手工建立此文件）。这个文件每一行保存了一个匹配的规则例如：</li>
+<li></li>
+</ul>
+<pre><code># 此为注释 – 将被 Git 忽略
+*.cs       # 忽略所有 .cs 结尾的文件
+!ABC.cs    # 但 ABC.cs 除外
+/BLL       # 仅仅忽略项目根目录下的 BLL 文件，不包括 subdir/BLL
+build/     # 忽略 build/ 目录下的所有文件
+doc/*.txt  # 会忽略 doc/notes.txt 但不包括 doc/server/arch.txt</code></pre><p>规则很简单，不做过多解释，但是有时候在项目开发过程中，突然心血来潮想把某些目录或文件加入忽略规则，按照上述方法定义后发现并未生效，原因是.gitignore只能忽略那些原来没有被track的文件，如果某些文件已经被纳入了版本管理中，则修改.gitignore是无效的。那么解决方法就是先把本地缓存删除（改变成未track状态），然后再提交：</p>
+<pre><code>git rm -r --cached .
+git add .
+git commit -m &#39;update .gitignore&#39;</code></pre><p>另外有一个自动生成.gitignore文件内容的网站<a href="https://www.gitignore.io/" target="_blank" rel="noopener">链接</a></p>
+<ul>
+<li>可以通过git config –global alias.自定义命令 原始命令  为命令配置别名，相当于宏定义，方便记忆与敲打。</li>
+</ul>
 
             </div>
             <hr />
@@ -687,7 +705,7 @@
             <br/>
             <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text"
                   property="dct:title" rel="dct:type">
-                    《每日一道面试题（第1期）---自定义handler如何有效保证内存泄漏问题》
+                    《git命令学习》
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="" property="cc:attributionName"
                rel="cc:attributionURL">
@@ -730,7 +748,7 @@
         repo: 'leaps339.github.io',
         owner: 'leaps339',
         admin: "leaps339",
-        id: '2020/03/31/mei-ri-yi-dao-mian-shi-ti-di-1-qi-zi-ding-yi-handler-ru-he-you-xiao-bao-zheng-nei-cun-xie-lou-wen-ti/',
+        id: '2020/04/30/git-ming-ling-xue-xi/',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -1013,51 +1031,50 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="fa fa-dot-circle-o"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="../mei-ri-yi-dao-mian-shi-ti-di-2-qi-activity-yu-fragment-zhi-jian-chang-jian-de-ji-chong-tong-xin-fang-shi/">
+                <a href="">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="每日一道面试题（第2期）---Activity 与 Fragment 之间常见的几种通信方式？">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="git命令学习">
                         
-                        <span class="card-title">每日一道面试题（第2期）---Activity 与 Fragment 之间常见的几种通信方式？</span>
+                        <span class="card-title">git命令学习</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            
-零零碎碎的东西总是记不长久，仅仅学习别人的文章也只是他人咀嚼后留下的残渣。无意中发现了这个每日一道面试题，想了想如果只是简单地去思考，那么不仅会收效甚微，甚至难一点的题目自己可能都懒得去想，坚持不下来。所以不如把每一次的思考、理解以及别人
+                            基本操作
+初始化或者修改全局用户名：git config –global user.name “your name”
+初始化或者修改全局提交邮箱git config –global user.email “user@example.com“
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="fa fa-clock-o fa-fw icon-date"></i>2020-03-31
-                        </span>
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2020-04-30
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="../../../../categories/Android/" class="post-category" target="_blank">
-                                    Android
+                            <a href="../../../../categories/Git/" class="post-category" target="_blank">
+                                    Git
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="../../../../tags/Android/" target="_blank">
-                        <span class="chip bg-color">Android</span>
-                    </a>
-                    
-                    <a href="../../../../tags/面试/" target="_blank">
-                        <span class="chip bg-color">面试</span>
+                    <a href="../../../../tags/Git/" target="_blank">
+                        <span class="chip bg-color">Git</span>
                     </a>
                     
                 </div>
@@ -1071,24 +1088,24 @@
                 下一篇&nbsp;<i class="fa fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="../retrofit-yuan-ma-fen-xi/">
+                <a href="../../28/shen-qi-de-ui-xiao-chuan-ya-you-a-you/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="Retrofit源码分析">
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="神奇的UI--小船呀游啊游">
                         
-                        <span class="card-title">Retrofit源码分析</span>
+                        <span class="card-title">神奇的UI--小船呀游啊游</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            在学习了Retrofit分析-漂亮的解耦套路（视频版）后，自己又仔细的钻研了一下Retrofit的源码，也大致清楚了Retrofit进行网络请求的步骤。好记性不如烂笔头，以文章的形式将对于Retrofit的思考记录下来，也加深理解。（如有错
+                            疫情原因，至今不允许返校。可怜今年毕业，毕业照与毕业典礼是想都不用想了，毕业答辩已经转为线上了，连毕业证也许都不能亲自去领了，真是悲哀！呆在家里都要半年了，哎，一个人是懒得是啥都不想干，想研究点东西也总是钻不进去，天天看着逐渐膨胀的身体发呆
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2020-03-31
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2020-04-28
                             </span>
                         <span class="publish-author">
                             
@@ -1107,6 +1124,10 @@
                     
                     <a href="../../../../tags/Android/" target="_blank">
                         <span class="chip bg-color">Android</span>
+                    </a>
+                    
+                    <a href="../../../../tags/UI/" target="_blank">
+                        <span class="chip bg-color">UI</span>
                     </a>
                     
                 </div>

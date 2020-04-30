@@ -290,7 +290,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -411,6 +411,10 @@
                             <span class="chip bg-color">Android</span>
                         </a>
                         
+                        <a href="../../../../tags/UI/" target="_blank">
+                            <span class="chip bg-color">UI</span>
+                        </a>
+                        
                     </div>
                     
                 </div>
@@ -445,14 +449,14 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    155
+                    2.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    9 分
                 </div>
                 
                 
@@ -469,8 +473,226 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <p>疫情原因，至今不允许返校。可怜今年毕业，毕业照与毕业典礼是想都不用想了，毕业答辩已经转为线上了，连毕业证也许都不能亲自去领了，真是悲哀！呆在家里都要半年了，哎，一个人是懒得是啥都不想干，想研究点东西也总是钻不进去，天天看着逐渐膨胀的身体发呆，更是悲哀啊！</p>
-<h1 id="神奇的UI"><a href="#神奇的UI" class="headerlink" title="神奇的UI"></a>神奇的UI</h1><p>几天前看到鸿阳大神公众号上的一篇推文，里面讨论的UI效果也确实让我这个小白惊叹。</p>
-<iframe height="500" width="500" src="/2020/04/28/shen-qi-de-UI--xiao-chuan-a-you-a-you/0.mp4"> </iframe>
+<h1 id="神奇的-UI"><a href="#神奇的-UI" class="headerlink" title="神奇的 UI"></a>神奇的 UI</h1><p>几天前看到鸿阳大神公众号上的一篇推文，里面讨论的 UI 效果也确实让我这个小白惊叹。</p>
+<img src="/2020/04/28/shen-qi-de-ui-xiao-chuan-ya-you-a-you/0.gif" width="200" height="200">
+
+<p>第一眼看上去好像没什么大不了的，不就是个列表么，仔细看下，不由得一声卧槽，这个小船！反正我看到这个 UI 效果是没有一点头绪，刚好有人已经做出来，所以就看着别人的 demo，了解下原理，然后试着自己做一个同样的效果。</p>
+<p>整体来说搞懂三个方面的问题就可以了：</p>
+<ul>
+<li>路径的绘制</li>
+<li>小船的移动</li>
+<li>滑动进度</li>
+</ul>
+<h1 id="路径绘制"><a href="#路径绘制" class="headerlink" title="路径绘制"></a>路径绘制</h1><p>通过<code>Path</code>类，合理运用内部方法可以创建并保存一条完整的路径。通过<code>moveTo(x,y)</code>方法移动路径的起始点到指定点，然后通过<code>rLineTo(dx,dy)</code>方法绘制一条从当前点到指定点的直线，注意此处的 (dx,dy) 坐标是相对于当前点的坐标，而<code>lineTo(x,y)</code>方法中的坐标使用的则是原始坐标系。</p>
+<p><code>arcTo(left,top,right,bottom,startAngle,sweepAngle,forceMoveTo)</code>方法则用来添加一段圆弧。left、top、right、bottom 参数决定圆弧位置及大小；startAngle 参数决定了圆弧的起始角度，0 度代表默认是向下；sweepAngle 参数决定了圆弧对应的度数，该数为正时代表顺时针方向，为负时代表逆时针方向；forceMoveTo 是一个布尔值，为 false 则代表如果之前路径的最后一个点与圆弧的起始点不是一个点时，会将两个点连接起来，也就是说始终是一条路径，为 true 则不会连接，则可能会变为两条路径。</p>
+<p>完整的代码如下：</p>
+<pre class="line-numbers language-kotlin"><code class="language-kotlin"><span class="token keyword">fun</span> <span class="token function">getPath</span><span class="token punctuation">(</span>pos<span class="token operator">:</span> Int<span class="token punctuation">,</span> width<span class="token operator">:</span> Float<span class="token punctuation">,</span> height<span class="token operator">:</span> Float<span class="token punctuation">)</span><span class="token operator">:</span> Path <span class="token punctuation">{</span>
+    <span class="token keyword">val</span> radius <span class="token operator">=</span> <span class="token number">100f</span>
+    <span class="token keyword">val</span> firstHeight <span class="token operator">=</span> height <span class="token operator">/</span> <span class="token number">2</span>
+    <span class="token keyword">val</span> firstWidth<span class="token operator">:</span> Float
+    <span class="token keyword">val</span> lastWidth<span class="token operator">:</span> Float
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>pos <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        firstWidth <span class="token operator">=</span> width <span class="token operator">/</span> <span class="token number">8</span>
+        lastWidth <span class="token operator">=</span> width <span class="token operator">/</span> <span class="token number">8</span> <span class="token operator">*</span> <span class="token number">7</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        firstWidth <span class="token operator">=</span> width <span class="token operator">/</span> <span class="token number">8</span> <span class="token operator">*</span> <span class="token number">7</span>
+        lastWidth <span class="token operator">=</span> width <span class="token operator">/</span> <span class="token number">8</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">return</span> <span class="token function">Path</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">apply</span> <span class="token punctuation">{</span>
+        <span class="token function">moveTo</span><span class="token punctuation">(</span>firstWidth<span class="token punctuation">,</span> <span class="token number">0f</span><span class="token punctuation">)</span>
+        <span class="token comment" spellcheck="true">//添加直线</span>
+        <span class="token function">rLineTo</span><span class="token punctuation">(</span><span class="token number">0f</span><span class="token punctuation">,</span> firstHeight<span class="token punctuation">)</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>pos <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">//添加圆弧</span>
+            <span class="token function">arcTo</span><span class="token punctuation">(</span>firstWidth<span class="token punctuation">,</span>
+                    firstHeight <span class="token operator">-</span> radius<span class="token punctuation">,</span>
+                    firstWidth <span class="token operator">+</span> <span class="token number">2</span> <span class="token operator">*</span> radius<span class="token punctuation">,</span>
+                    firstHeight <span class="token operator">+</span> radius<span class="token punctuation">,</span>
+                    <span class="token number">180f</span><span class="token punctuation">,</span>
+                    <span class="token operator">-</span><span class="token number">90f</span><span class="token punctuation">,</span>
+                    <span class="token boolean">false</span><span class="token punctuation">)</span>
+
+            <span class="token function">rLineTo</span><span class="token punctuation">(</span>lastWidth <span class="token operator">-</span> firstWidth <span class="token operator">-</span> <span class="token number">2</span> <span class="token operator">*</span> radius<span class="token punctuation">,</span> <span class="token number">0f</span><span class="token punctuation">)</span>
+
+            <span class="token function">arcTo</span><span class="token punctuation">(</span>lastWidth <span class="token operator">-</span> <span class="token number">2</span> <span class="token operator">*</span> radius<span class="token punctuation">,</span>
+                    firstHeight <span class="token operator">+</span> radius<span class="token punctuation">,</span>
+                    lastWidth<span class="token punctuation">,</span>
+                    firstHeight <span class="token operator">+</span> <span class="token number">3</span> <span class="token operator">*</span> radius<span class="token punctuation">,</span>
+                    <span class="token operator">-</span><span class="token number">90f</span><span class="token punctuation">,</span>
+                    <span class="token number">90f</span><span class="token punctuation">,</span>
+                    <span class="token boolean">false</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token function">arcTo</span><span class="token punctuation">(</span>firstWidth <span class="token operator">-</span> <span class="token number">2</span> <span class="token operator">*</span> radius<span class="token punctuation">,</span>
+                    firstHeight <span class="token operator">-</span> radius<span class="token punctuation">,</span>
+                    firstWidth<span class="token punctuation">,</span>
+                    firstHeight <span class="token operator">+</span> radius<span class="token punctuation">,</span>
+                    <span class="token number">0f</span><span class="token punctuation">,</span>
+                    <span class="token number">90f</span><span class="token punctuation">,</span>
+                    <span class="token boolean">false</span><span class="token punctuation">)</span>
+
+            <span class="token function">rLineTo</span><span class="token punctuation">(</span>lastWidth <span class="token operator">-</span> firstWidth <span class="token operator">+</span> <span class="token number">2</span> <span class="token operator">*</span> radius<span class="token punctuation">,</span> <span class="token number">0f</span><span class="token punctuation">)</span>
+
+            <span class="token function">arcTo</span><span class="token punctuation">(</span>lastWidth<span class="token punctuation">,</span>
+                    firstHeight <span class="token operator">+</span> radius<span class="token punctuation">,</span>
+                    lastWidth <span class="token operator">+</span> <span class="token number">2</span> <span class="token operator">*</span> radius<span class="token punctuation">,</span>
+                    firstHeight <span class="token operator">+</span> <span class="token number">3</span> <span class="token operator">*</span> radius<span class="token punctuation">,</span>
+                    <span class="token operator">-</span><span class="token number">90f</span><span class="token punctuation">,</span>
+                    <span class="token operator">-</span><span class="token number">90f</span><span class="token punctuation">,</span>
+                    <span class="token boolean">false</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token function">rLineTo</span><span class="token punctuation">(</span><span class="token number">0f</span><span class="token punctuation">,</span> firstHeight <span class="token operator">-</span> <span class="token number">2</span> <span class="token operator">*</span> radius<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>从 y 轴来看，firstHeight 将路径分为两部分，上面是一条直线，下面则是两个圆弧加一段直线；firstWidth 与 lastWidth 代表路径在 x 轴上的两个拐点，分别是八分之一处与八分之七处；pos 则用于区分两种不同的路径。</p>
+<p>有了路径之后，就可以通过<code>canvas?.drawPath(mPath, mPaint)</code>将这段路径绘制出来。现在结合 RecycleView，完整的河道图就出来啦。</p>
+<pre class="line-numbers language-kotlin"><code class="language-kotlin"><span class="token keyword">class</span> RiverView <span class="token operator">:</span> ViewGroup <span class="token punctuation">{</span>
+
+    <span class="token keyword">constructor</span><span class="token punctuation">(</span>context<span class="token operator">:</span> Context<span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token keyword">super</span><span class="token punctuation">(</span>context<span class="token punctuation">)</span>
+    <span class="token keyword">constructor</span><span class="token punctuation">(</span>context<span class="token operator">:</span> Context<span class="token punctuation">,</span> attributeSet<span class="token operator">:</span> AttributeSet<span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token keyword">super</span><span class="token punctuation">(</span>context<span class="token punctuation">,</span> attributeSet<span class="token punctuation">)</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">val</span> mPaint <span class="token operator">=</span> <span class="token function">Paint</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">apply</span> <span class="token punctuation">{</span> style <span class="token operator">=</span> Paint<span class="token punctuation">.</span>Style<span class="token punctuation">.</span>STROKE <span class="token punctuation">}</span>
+    <span class="token keyword">private</span> <span class="token keyword">lateinit</span> <span class="token keyword">var</span> mPath<span class="token operator">:</span> Path
+
+    <span class="token keyword">init</span> <span class="token punctuation">{</span>
+        <span class="token function">setWillNotDraw</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">fun</span> <span class="token function">setPath</span><span class="token punctuation">(</span>path<span class="token operator">:</span> Path<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        mPath <span class="token operator">=</span> path
+        mPathMeasure <span class="token operator">=</span> <span class="token function">PathMeasure</span><span class="token punctuation">(</span>mPath<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">fun</span> <span class="token function">setRiverColor</span><span class="token punctuation">(</span>color<span class="token operator">:</span> Int<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        mPaint<span class="token punctuation">.</span>color <span class="token operator">=</span> color
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">fun</span> <span class="token function">setRiverWidth</span><span class="token punctuation">(</span>width<span class="token operator">:</span> Float<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        mPaint<span class="token punctuation">.</span>strokeWidth <span class="token operator">=</span> width
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">override</span> <span class="token keyword">fun</span> <span class="token function">onLayout</span><span class="token punctuation">(</span>changed<span class="token operator">:</span> Boolean<span class="token punctuation">,</span> l<span class="token operator">:</span> Int<span class="token punctuation">,</span> t<span class="token operator">:</span> Int<span class="token punctuation">,</span> r<span class="token operator">:</span> Int<span class="token punctuation">,</span> b<span class="token operator">:</span> Int<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+    <span class="token keyword">override</span> <span class="token keyword">fun</span> <span class="token function">onDraw</span><span class="token punctuation">(</span>canvas<span class="token operator">:</span> Canvas<span class="token operator">?</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onDraw</span><span class="token punctuation">(</span>canvas<span class="token punctuation">)</span>
+        canvas<span class="token operator">?</span><span class="token punctuation">.</span><span class="token function">drawPath</span><span class="token punctuation">(</span>mPath<span class="token punctuation">,</span> mPaint<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-kotlin"><code class="language-kotlin"><span class="token keyword">override</span> <span class="token keyword">fun</span> <span class="token function">onBindViewHolder</span><span class="token punctuation">(</span>holder<span class="token operator">:</span> RowingViewHolder<span class="token punctuation">,</span> position<span class="token operator">:</span> Int<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        holder<span class="token punctuation">.</span>itemView<span class="token punctuation">.</span>mRiverView<span class="token punctuation">.</span><span class="token function">apply</span> <span class="token punctuation">{</span>
+            <span class="token keyword">val</span> width <span class="token operator">=</span> context<span class="token punctuation">.</span>resources<span class="token punctuation">.</span>displayMetrics<span class="token punctuation">.</span>widthPixels<span class="token punctuation">.</span><span class="token function">toFloat</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> context<span class="token punctuation">.</span><span class="token function">dp2px</span><span class="token punctuation">(</span><span class="token number">32f</span><span class="token punctuation">)</span>
+            <span class="token keyword">val</span> height <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token function">dp2px</span><span class="token punctuation">(</span><span class="token number">240f</span><span class="token punctuation">)</span>
+            <span class="token function">setBackgroundColor</span><span class="token punctuation">(</span><span class="token keyword">data</span><span class="token punctuation">[</span>position<span class="token punctuation">]</span><span class="token punctuation">.</span>cardColor<span class="token punctuation">)</span>
+            <span class="token function">setPath</span><span class="token punctuation">(</span><span class="token function">getPath</span><span class="token punctuation">(</span>position<span class="token punctuation">,</span> width<span class="token punctuation">,</span> height<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token function">setRiverWidth</span><span class="token punctuation">(</span><span class="token number">100f</span><span class="token punctuation">)</span>
+            <span class="token function">setRiverColor</span><span class="token punctuation">(</span><span class="token keyword">data</span><span class="token punctuation">[</span>position<span class="token punctuation">]</span><span class="token punctuation">.</span>riverColor<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>效果图如下：</p>
+<img src="/2020/04/28/shen-qi-de-ui-xiao-chuan-ya-you-a-you/1.jpg" width="200" height="200">
+
+<h1 id="小船的移动"><a href="#小船的移动" class="headerlink" title="小船的移动"></a>小船的移动</h1><p>对路径进行具体的处理，包括获取某一个进度点、该点的方向等信息，就需要用到 PathMeasure 类了。</p>
+<p>在创建 PathMeasure 对象时，需要传入一个 Path 对象，代表需要处理的路径。</p>
+<pre class="line-numbers language-kotlin"><code class="language-kotlin">mPathMeasure <span class="token operator">=</span> <span class="token function">PathMeasure</span><span class="token punctuation">(</span>mPath<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>第二个参数代表是否将 Path 处理为闭合的。也就是说，当该参数为 true 时，那么 PathMeasure 在处理 Path 时，即使传入的 Path 不是闭合的，PathMeasure 也会当做闭合的 Path 的去处理，需要注意的是，只是当做闭合的处理，而不是真的将 Path 变为闭合的，不会对原先的 Path 产生影响。</p>
+<p>那么怎么样根据一个进度值就能使小船进行相应的移动呢，此时就需要用到 PathMeasure 中的 getLength 与 getPosTan 方法了。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token comment" spellcheck="true">//获得路径的长度</span>
+<span class="token keyword">public</span> <span class="token keyword">float</span> <span class="token function">getLength</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">//获取该路径 disance 处的点的坐标及方向的切线值</span>
+<span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">getPosTan</span><span class="token punctuation">(</span><span class="token keyword">float</span> distance<span class="token punctuation">,</span> <span class="token keyword">float</span> pos<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">float</span> tan<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>说下 getPosTan 方法，distance 代表长度，也就是说路径 distance 处的点，这个变量可以传入<code>progress* mPathMeasure.getLength()</code>，progress 取值 0-1，代表进度值，这样就可以传入不同的 progress 值进行移动；pos[] 则要求我们传入一个 float 数组，当方法运行完成后该数组中就会包含此点的坐标 (pos[0],pos[1])；tan[] 同样是 float 数组，方法完成后同样会产生 tan[0] 与 tan[1] 两个值，代表了该点的方向值，怎么理解这两个值呢，此时就需要借助 Math 中的 tan 系列函数。</p>
+<pre class="line-numbers language-java"><code class="language-java">Math<span class="token punctuation">.</span><span class="token function">tan</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+Math<span class="token punctuation">.</span><span class="token function">atan</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+Math<span class="token punctuation">.</span><span class="token function">atan2</span><span class="token punctuation">(</span>y<span class="token punctuation">,</span>x<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>先说明一下，在代码中涉及到度数时，一般都采用了弧度去表示。弧度与度数的关系是：半径为 1 的圆中任意角度所对应的弧长，就是该角度的弧度。所以 360°对应的弧度就是 2π，180°的弧度值为π。</p>
+<p><code>Math.tan(PI / 4)</code>也就是 tan(45°)，计算 45 度角的正切值，结果是 1。</p>
+<p><code>Math.atan(1)</code>也就是 arctan(1)，计算正切值 1 所对应的角度，结果是 PI/4。这两个的关系就是 tan(arctan(x)) = x。</p>
+<p>而<code>Math.atan2(y,x)</code>与<code>Math.atan(x)</code>的用途是一样的，只是传入的参数不同，这里的 y 代表角度对边的长度，x 代表角度邻边的长度，可以说 atan2(y,x) 与 atan(y / x) 得出的结果是一样的。或许看下面的图会更明白一点。</p>
+<img src="/2020/04/28/shen-qi-de-ui-xiao-chuan-ya-you-a-you/2.jpg">
+
+<p>明白了这个以后，那么 tan[] 中存储的值就是 atan2(y,x) 中的 x、y 值。所以该点的旋转角度就是</p>
+<pre class="line-numbers language-kotlin"><code class="language-kotlin"><span class="token function">atan2</span><span class="token punctuation">(</span>mTan<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> mTan<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">180</span> <span class="token operator">/</span> PI<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>由于 atan2 方法返回的是弧度值，所以通过*180/PI 将其转为对应的角度。好了，有了位置以及对应的旋转角度，就可以在 onDraw 方法中处理小船的位置及方向啦。</p>
+<pre class="line-numbers language-kotlin"><code class="language-kotlin">    <span class="token keyword">fun</span> <span class="token function">move</span><span class="token punctuation">(</span>progress<span class="token operator">:</span> Float<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token keyword">this</span><span class="token operator">::</span>mRowingView<span class="token punctuation">.</span>isInitialized<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">//小船</span>
+            mRowingView <span class="token operator">=</span> <span class="token function">RowingView</span><span class="token punctuation">(</span>context<span class="token punctuation">)</span>
+            <span class="token function">addView</span><span class="token punctuation">(</span>mRowingView<span class="token punctuation">)</span>
+            mRowingView<span class="token punctuation">.</span><span class="token function">layout</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">200</span><span class="token punctuation">,</span> <span class="token number">200</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+
+        mPathMeasure<span class="token punctuation">.</span><span class="token function">getPosTan</span><span class="token punctuation">(</span>progress <span class="token operator">*</span> mPathMeasure<span class="token punctuation">.</span>length<span class="token punctuation">,</span> mPos<span class="token punctuation">,</span> mTan<span class="token punctuation">)</span>
+        <span class="token function">postInvalidate</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">override</span> <span class="token keyword">fun</span> <span class="token function">onDraw</span><span class="token punctuation">(</span>canvas<span class="token operator">:</span> Canvas<span class="token operator">?</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onDraw</span><span class="token punctuation">(</span>canvas<span class="token punctuation">)</span>
+        canvas<span class="token operator">?</span><span class="token punctuation">.</span><span class="token function">drawPath</span><span class="token punctuation">(</span>mPath<span class="token punctuation">,</span> mPaint<span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token operator">::</span>mRowingView<span class="token punctuation">.</span>isInitialized<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            mRowingView<span class="token punctuation">.</span><span class="token function">apply</span> <span class="token punctuation">{</span>
+                translationX <span class="token operator">=</span> mPos<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">-</span> mRowingView<span class="token punctuation">.</span>width <span class="token operator">/</span> <span class="token number">2</span>
+                translationY <span class="token operator">=</span> mPos<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">-</span> mRowingView<span class="token punctuation">.</span>height <span class="token operator">/</span> <span class="token number">2</span>
+                rotation <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token function">atan2</span><span class="token punctuation">(</span>mTan<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> mTan<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">180</span> <span class="token operator">/</span> PI <span class="token operator">+</span> <span class="token number">180</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toFloat</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>当我们调用 move 函数时，小船就会根据传入的 progress 移动到对应的位置啦。</p>
+<h1 id="滑动进度"><a href="#滑动进度" class="headerlink" title="滑动进度"></a>滑动进度</h1><p>好了，现在路径有了，小船也可以移动了，剩下的就是处理当手指滑动列表时，小船也要滑动对应的进度。监听 RecycleView 的滑动是不可避免的了，具体的处理代码如下。</p>
+<pre class="line-numbers language-kotlin"><code class="language-kotlin">mRecycleView<span class="token punctuation">.</span><span class="token function">apply</span> <span class="token punctuation">{</span>
+            layoutManager <span class="token operator">=</span> mLayoutManager
+            adapter <span class="token operator">=</span> mAdapter
+            <span class="token function">addOnScrollListener</span><span class="token punctuation">(</span><span class="token keyword">object</span> <span class="token operator">:</span> RecyclerView<span class="token punctuation">.</span><span class="token function">OnScrollListener</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">override</span> <span class="token keyword">fun</span> <span class="token function">onScrolled</span><span class="token punctuation">(</span>recyclerView<span class="token operator">:</span> RecyclerView<span class="token punctuation">,</span> dx<span class="token operator">:</span> Int<span class="token punctuation">,</span> dy<span class="token operator">:</span> Int<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onScrolled</span><span class="token punctuation">(</span>recyclerView<span class="token punctuation">,</span> dx<span class="token punctuation">,</span> dy<span class="token punctuation">)</span>
+                    <span class="token keyword">val</span> computeVerticalScrollOffset <span class="token operator">=</span> mRecycleView<span class="token punctuation">.</span><span class="token function">computeVerticalScrollOffset</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                    <span class="token keyword">val</span> distance <span class="token operator">=</span> <span class="token function">dp2px</span><span class="token punctuation">(</span><span class="token number">240f</span> <span class="token operator">+</span> <span class="token number">10</span> <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">times</span><span class="token punctuation">(</span>mAdapter<span class="token punctuation">.</span>data<span class="token punctuation">.</span>size<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">minus</span><span class="token punctuation">(</span>mRecycleView<span class="token punctuation">.</span>height<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">div</span><span class="token punctuation">(</span>mAdapter<span class="token punctuation">.</span>data<span class="token punctuation">.</span>size<span class="token punctuation">)</span>
+                    <span class="token keyword">val</span> progress <span class="token operator">=</span> computeVerticalScrollOffset <span class="token operator">%</span> distance <span class="token operator">/</span> distance
+                    <span class="token keyword">val</span> pos <span class="token operator">=</span> computeVerticalScrollOffset <span class="token operator">/</span> distance<span class="token punctuation">.</span><span class="token function">toInt</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                    <span class="token function">move</span><span class="token punctuation">(</span>progress<span class="token punctuation">,</span> pos<span class="token punctuation">)</span>
+                    post <span class="token punctuation">{</span>
+                        mAdapter<span class="token punctuation">.</span><span class="token function">notifyItemChanged</span><span class="token punctuation">(</span>pos<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+                    <span class="token punctuation">}</span>
+
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+
+<span class="token keyword">fun</span> <span class="token function">move</span><span class="token punctuation">(</span>progress<span class="token operator">:</span> Float<span class="token punctuation">,</span> pos<span class="token operator">:</span> Int<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">val</span> holder <span class="token operator">=</span> mRecycleView<span class="token punctuation">.</span><span class="token function">findViewHolderForAdapterPosition</span><span class="token punctuation">(</span>pos<span class="token punctuation">)</span> <span class="token keyword">as</span><span class="token operator">?</span> RowingAdapter<span class="token punctuation">.</span>RowingViewHolder
+        holder<span class="token operator">?</span><span class="token punctuation">.</span>itemView<span class="token operator">?</span><span class="token punctuation">.</span>findViewById<span class="token operator">&lt;</span>RiverView<span class="token operator">></span><span class="token punctuation">(</span>R<span class="token punctuation">.</span>id<span class="token punctuation">.</span>mRiverView<span class="token punctuation">)</span><span class="token operator">?</span><span class="token punctuation">.</span><span class="token function">move</span><span class="token punctuation">(</span>progress<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>首先 computeVerticalScrollOffset 是 RecycleView 当前的总滑动长度。</p>
+<p>然后，<code>dp2px(240f + 10 * 2).times(mAdapter.data.size)</code>计算了填充完数据后的 RecycleView 的高度，而<code>mRecycleView.height</code>表示当前 RecycleView 在屏幕上显示出来高度。之所以要减去这个，是因为小船刚开始在 RecycleView 的顶部，当我们滑动 RecycleView 到底部时，小船也需要移动到底部，这之间的距离就差了一个 Recycle 的 Height。之后除以<code>mAdapter.data.size</code>，得到的是每一个卡片所对应的滑动距离，即 distance。</p>
+<p>之后，<code>computeVerticalScrollOffset % distance</code>获得的值表示在一个卡片上小船的进度，除以 distance 就得出了进度百分比 progress。</p>
+<p><code>computeVerticalScrollOffset / distance</code>计算出哪个卡片上的小船需要移动。有了 pos 与 progress，就知道了当前 RecycleView 的滑动进度对应的小船的滑动进度，对小船进行移动就行了。</p>
+<p>还有一点，当小船移动到下一个卡片时，当前卡片上的小船需要消失，因此还需在 onBindViewHolder 函数中做些处理。</p>
+<pre class="line-numbers language-kotlin"><code class="language-kotlin"><span class="token keyword">override</span> <span class="token keyword">fun</span> <span class="token function">onBindViewHolder</span><span class="token punctuation">(</span>holder<span class="token operator">:</span> RowingViewHolder<span class="token punctuation">,</span> position<span class="token operator">:</span> Int<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        holder<span class="token punctuation">.</span>itemView<span class="token punctuation">.</span>mRiverView<span class="token punctuation">.</span><span class="token function">apply</span> <span class="token punctuation">{</span>
+            <span class="token keyword">val</span> width <span class="token operator">=</span> context<span class="token punctuation">.</span>resources<span class="token punctuation">.</span>displayMetrics<span class="token punctuation">.</span>widthPixels<span class="token punctuation">.</span><span class="token function">toFloat</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> context<span class="token punctuation">.</span><span class="token function">dp2px</span><span class="token punctuation">(</span><span class="token number">32f</span><span class="token punctuation">)</span>
+            <span class="token keyword">val</span> height <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token function">dp2px</span><span class="token punctuation">(</span><span class="token number">240f</span><span class="token punctuation">)</span>
+            <span class="token function">setBackgroundColor</span><span class="token punctuation">(</span><span class="token keyword">data</span><span class="token punctuation">[</span>position<span class="token punctuation">]</span><span class="token punctuation">.</span>cardColor<span class="token punctuation">)</span>
+            <span class="token function">setPath</span><span class="token punctuation">(</span><span class="token function">getPath</span><span class="token punctuation">(</span>position<span class="token punctuation">,</span> width<span class="token punctuation">,</span> height<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token function">setRiverWidth</span><span class="token punctuation">(</span><span class="token number">100f</span><span class="token punctuation">)</span>
+            <span class="token function">setRiverColor</span><span class="token punctuation">(</span><span class="token keyword">data</span><span class="token punctuation">[</span>position<span class="token punctuation">]</span><span class="token punctuation">.</span>riverColor<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>holder<span class="token punctuation">.</span>itemView<span class="token punctuation">.</span>mRiverView <span class="token operator">!=</span> lastRiverView<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>lastRiverView<span class="token operator">?</span><span class="token punctuation">.</span><span class="token function">initRowing</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
+                lastRiverView<span class="token operator">?</span><span class="token punctuation">.</span>mRowingView<span class="token operator">?</span><span class="token punctuation">.</span>visibility <span class="token operator">=</span> View<span class="token punctuation">.</span>GONE
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>holder<span class="token punctuation">.</span>itemView<span class="token punctuation">.</span>mRiverView<span class="token punctuation">.</span><span class="token function">initRowing</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                holder<span class="token punctuation">.</span>itemView<span class="token punctuation">.</span>mRiverView<span class="token punctuation">.</span>mRowingView<span class="token punctuation">.</span>visibility <span class="token operator">=</span> View<span class="token punctuation">.</span>VISIBLE
+            lastRiverView <span class="token operator">=</span> holder<span class="token punctuation">.</span>itemView<span class="token punctuation">.</span>mRiverView
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>好了，现在所有的问题都解决了，小船就可以快乐的游起来了。</p>
+<img src="/2020/04/28/shen-qi-de-ui-xiao-chuan-ya-you-a-you/3.gif">
+
+
+
+<p>代码已上传至<a href="https://github.com/leaps339/RowingView" target="_blank" rel="noopener">github</a></p>
+
             </div>
             <hr />
 
@@ -954,48 +1176,48 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fa fa-dot-circle-o"></i>&nbsp;本篇
-            </div>
+                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="">
+                <a href="../../30/git-ming-ling-xue-xi/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="神奇的UI--小船呀游啊游">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="git命令学习">
                         
-                        <span class="card-title">神奇的UI--小船呀游啊游</span>
+                        <span class="card-title">git命令学习</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            疫情原因，至今不允许返校。可怜今年毕业，毕业照与毕业典礼是想都不用想了，毕业答辩已经转为线上了，连毕业证也许都不能亲自去领了，真是悲哀！呆在家里都要半年了，哎，一个人是懒得是啥都不想干，想研究点东西也总是钻不进去，天天看着逐渐膨胀的身体发呆
+                            基本操作
+初始化或者修改全局用户名：git config –global user.name “your name”
+初始化或者修改全局提交邮箱git config –global user.email “user@example.com“
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2020-04-28
-                            </span>
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2020-04-30
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="../../../../categories/Android/" class="post-category" target="_blank">
-                                    Android
+                            <a href="../../../../categories/Git/" class="post-category" target="_blank">
+                                    Git
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="../../../../tags/Android/" target="_blank">
-                        <span class="chip bg-color">Android</span>
+                    <a href="../../../../tags/Git/" target="_blank">
+                        <span class="chip bg-color">Git</span>
                     </a>
                     
                 </div>
@@ -1013,7 +1235,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="每日一道面试题（第10期）---谈谈对HandlerThread与AsyncTask的理解">
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="每日一道面试题（第10期）---谈谈对HandlerThread与AsyncTask的理解">
                         
                         <span class="card-title">每日一道面试题（第10期）---谈谈对HandlerThread与AsyncTask的理解</span>
                     </div>
@@ -1204,7 +1426,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">23.7k</span>
+            <span class="white-color">27.8k</span>
             
 
             <br>
