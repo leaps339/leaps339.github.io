@@ -4,12 +4,11 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="每日一道面试题（第8期）---ANR出现的场景以及解决方案, 微笑不露声色">
+    <meta name="keywords" content="神奇的UI--小船呀游啊游, 微笑不露声色">
     <meta name="baidu-site-verification" content>
     <meta name="google-site-verification" content>
     <meta name="360-site-verification" content>
-    <meta name="description" content="
-零零碎碎的东西总是记不长久，仅仅学习别人的文章也只是他人咀嚼后留下的残渣。无意中发现了这个每日一道面试题，想了想如果只是简单地去思考，那么不仅会收效甚微，甚至难一点的题目自己可能都懒得去想，坚持不下来。所以不如把每一次的思考、理解以及别人">
+    <meta name="description" content="疫情原因，至今不允许返校。可怜今年毕业，毕业照与毕业典礼是想都不用想了，毕业答辩已经转为线上了，连毕业证也许都不能亲自去领了，真是悲哀！呆在家里都要半年了，哎，一个人是懒得是啥都不想干，想研究点东西也总是钻不进去，天天看着逐渐膨胀的身体发呆">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -17,7 +16,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>每日一道面试题（第8期）---ANR出现的场景以及解决方案 | 微笑不露声色</title>
+    <title>神奇的UI--小船呀游啊游 | 微笑不露声色</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -291,13 +290,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        每日一道面试题（第8期）---ANR出现的场景以及解决方案
+                        神奇的UI--小船呀游啊游
                     </div>
                 </div>
             </div>
@@ -412,10 +411,6 @@
                             <span class="chip bg-color">Android</span>
                         </a>
                         
-                        <a href="../../../../tags/面试/" target="_blank">
-                            <span class="chip bg-color">面试</span>
-                        </a>
-                        
                     </div>
                     
                 </div>
@@ -436,7 +431,7 @@
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-03-31
+                    2020-04-28
                 </div>
 
                 <div class="post-author info-break-policy">
@@ -450,14 +445,14 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    795
+                    155
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    1 分
                 </div>
                 
                 
@@ -473,27 +468,9 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <blockquote>
-<p>零零碎碎的东西总是记不长久，仅仅学习别人的文章也只是他人咀嚼后留下的残渣。无意中发现了这个<a href="https://github.com/Moosphan/Android-Daily-Interview" target="_blank" rel="noopener">每日一道面试题</a>，想了想如果只是简单地去思考，那么不仅会收效甚微，甚至难一点的题目自己可能都懒得去想，坚持不下来。所以不如把每一次的思考、理解以及别人的见解记录下来。不仅加深自己的理解，更要激励自己坚持下去。</p>
-</blockquote>
-<p><strong>ANR：</strong> application not response，应用程序没有响应。Android应用程序基于消息处理机制保证在发生输入、触摸等需要响应的事件之后，在规定的时间内没有得到有效的响应或者响应时间过长，都会发生ANR，弹出ANR对话框—等待应用或者退出应用。</p>
-<p>Android中的响应性事件处理受到Activity Manager Service、Window Manager Service这两个系统服务的监视，所有与ANR相关的消息，都经过系统进程（system_service）的调度，然后分发给应用进程进行实际的消息处理。系统进程通过系统服务的监视，根据不同的情况限制不同的超时时长，一旦在限制的时间内得不到响应，就会调用AppNotRespondingDialog.show()显示ANR对话框。</p>
-<p>实际上，Android的主线程，也就是用来绘制View的UI线程，是线程不安全的，所以就使用ANR原则对主线程进行限制，保证主线程在串行处理事件时保持流畅性，给用户良好的体验（比如UI的绘制工作必须在16ms内完成）。所以在主线程中的所有耗时操作（密集型cup操作、网络请求、大量IO等），都有可能发生ANR。</p>
-<p>Android四大组件Activity、Service、BroadcastReceiver、ContentProvider都是运行在主线程中，对此定义不同的标准限制它们的响应时长：</p>
-<ul>
-<li>Service TimeOut：Service：前台Service（通知栏有显示）20s内、后台Service200s内</li>
-<li>BroadcastQueue TimeOut：BroadcastReceiver中，前台广播10s，后台广播60s。</li>
-<li>ContentProvider TimeOut：在publish中超过10s</li>
-<li>InputDispatching TimeOut：键盘输入事件、触摸事件5s内得不到响应</li>
-</ul>
-<p><strong>ANR监测机制：</strong> 整体的一个大致流程就是—事件开始前进行计时-&gt;进行事件处理-&gt;事件处理完，限制时间没到，移除计时，系统正常进行。事件没处理完，限制时间已到，移除计时，弹出ANR对话框</p>
-<p>发生事件处理超时的情况有两种：</p>
-<ul>
-<li>当前事件没有机会得到处理，主线程正在响应另外的时间，当前事件被阻塞</li>
-<li>当前事件正在处理，但处理事件过长导致长时间得不到响应</li>
-</ul>
-<p><strong>ANR预防：</strong> 耗时操作在尽量子线程中操作—AsyncTask、intentService、HandlerThread，多线程操作避免死锁的出现以及快速的解决办法，还有就是UI层次的复杂绘制，尽量减少布局嵌套，如果Activity初始化需要一定的耗时，可以考虑马上显示Activity显示Dialog加载框异步加载数据。</p>
-
+                <p>疫情原因，至今不允许返校。可怜今年毕业，毕业照与毕业典礼是想都不用想了，毕业答辩已经转为线上了，连毕业证也许都不能亲自去领了，真是悲哀！呆在家里都要半年了，哎，一个人是懒得是啥都不想干，想研究点东西也总是钻不进去，天天看着逐渐膨胀的身体发呆，更是悲哀啊！</p>
+<h1 id="神奇的UI"><a href="#神奇的UI" class="headerlink" title="神奇的UI"></a>神奇的UI</h1><p>几天前看到鸿阳大神公众号上的一篇推文，里面讨论的UI效果也确实让我这个小白惊叹。</p>
+<iframe height="500" width="500" src="/2020/04/28/shen-qi-de-UI--xiao-chuan-a-you-a-you/0.mp4"> </iframe>
             </div>
             <hr />
 
@@ -651,7 +628,7 @@
             <br/>
             <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text"
                   property="dct:title" rel="dct:type">
-                    《每日一道面试题（第8期）---ANR出现的场景以及解决方案》
+                    《神奇的UI--小船呀游啊游》
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="" property="cc:attributionName"
                rel="cc:attributionURL">
@@ -694,7 +671,7 @@
         repo: 'leaps339.github.io',
         owner: 'leaps339',
         admin: "leaps339",
-        id: '2020/03/31/mei-ri-yi-dao-mian-shi-ti-di-8-qi-anr-chu-xian-de-chang-jing-yi-ji-jie-jue-fang-an/',
+        id: '2020/04/28/shen-qi-de-ui-xiao-chuan-ya-you-a-you/',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -977,30 +954,30 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="fa fa-dot-circle-o"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="../mei-ri-yi-dao-mian-shi-ti-di-9-qi-tan-tan-handler-ji-zhi-he-yuan-li/">
+                <a href="">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="每日一道面试题（第9期）---谈谈Handler机制和原理">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="神奇的UI--小船呀游啊游">
                         
-                        <span class="card-title">每日一道面试题（第9期）---谈谈Handler机制和原理</span>
+                        <span class="card-title">神奇的UI--小船呀游啊游</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            
-零零碎碎的东西总是记不长久，仅仅学习别人的文章也只是他人咀嚼后留下的残渣。无意中发现了这个每日一道面试题 ，想了想如果只是简单地去思考，那么不仅会收效甚微，甚至难一点的题目自己可能都懒得去想，坚持不下来。所以不如把每一次的思考、理解以及别
+                            疫情原因，至今不允许返校。可怜今年毕业，毕业照与毕业典礼是想都不用想了，毕业答辩已经转为线上了，连毕业证也许都不能亲自去领了，真是悲哀！呆在家里都要半年了，哎，一个人是懒得是啥都不想干，想研究点东西也总是钻不进去，天天看着逐渐膨胀的身体发呆
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="fa fa-clock-o fa-fw icon-date"></i>2020-03-31
-                        </span>
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2020-04-28
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
@@ -1013,15 +990,12 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
                     <a href="../../../../tags/Android/" target="_blank">
                         <span class="chip bg-color">Android</span>
-                    </a>
-                    
-                    <a href="../../../../tags/面试/" target="_blank">
-                        <span class="chip bg-color">面试</span>
                     </a>
                     
                 </div>
@@ -1035,20 +1009,20 @@
                 下一篇&nbsp;<i class="fa fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="../mei-ri-yi-dao-mian-shi-ti-di-7-qi-android-bu-jian-dong-hua-yu-shu-xing-dong-hua-de-qu-bie/">
+                <a href="../../../03/31/mei-ri-yi-dao-mian-shi-ti-di-10-qi-tan-tan-dui-handlerthread-yu-asynctask-de-li-jie/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/26.jpg" class="responsive-img" alt="每日一道面试题（第7期）---Android补间动画与属性动画的区别">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="每日一道面试题（第10期）---谈谈对HandlerThread与AsyncTask的理解">
                         
-                        <span class="card-title">每日一道面试题（第7期）---Android补间动画与属性动画的区别</span>
+                        <span class="card-title">每日一道面试题（第10期）---谈谈对HandlerThread与AsyncTask的理解</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
                             
-零零碎碎的东西总是记不长久，仅仅学习别人的文章也只是他人咀嚼后留下的残渣。无意中发现了这个每日一道面试题，想了想如果只是简单地去思考，那么不仅会收效甚微，甚至难一点的题目自己可能都懒得去想，坚持不下来。所以不如把每一次的思考、理解以及别人
+零零碎碎的东西总是记不长久，仅仅学习别人的文章也只是他人咀嚼后留下的残渣。无意中发现了这个每日一道面试题 ，想了想如果只是简单地去思考，那么不仅会收效甚微，甚至难一点的题目自己可能都懒得去想，坚持不下来。所以不如把每一次的思考、理解以及别
                         
                     </div>
                     <div class="publish-info">
